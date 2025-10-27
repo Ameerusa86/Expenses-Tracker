@@ -1,10 +1,10 @@
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { dbConnect } from '@/lib/db'
 import { Transaction } from '@/models/Transaction'
 import { Account } from '@/models/Account'
 import { Category } from '@/models/Category'
-import { getUserId } from '@/lib/auth'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -19,13 +19,20 @@ export default async function DashboardPage() {
       name?: string | null
       email?: string | null
       image?: string | null
+      id?: string | null
     } | null
   } | null
-  const name = session?.user?.name ?? session?.user?.email ?? 'there'
+
+  // Redirect to login if not authenticated
+  if (!session?.user?.id) {
+    redirect('/login')
+  }
+
+  const name = session.user.name ?? session.user.email ?? 'there'
+  const userId = session.user.id
 
   // Get user data
   await dbConnect()
-  const userId = await getUserId()
 
   // Get counts and recent data
   const accountsCount = await Account.countDocuments({ userId })
