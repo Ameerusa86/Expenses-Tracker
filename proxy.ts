@@ -1,19 +1,40 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
-// Force all preview deployment hostnames to the stable production alias
-// so auth origin/cookies are consistent and providers' redirect URIs match.
+// Canonicalize to the origin defined by env, regardless of hosting provider.
+// This keeps auth cookies and OAuth callback origins consistent on Vercel, Netlify, etc.
 export default function proxy(request: NextRequest) {
-  const prodHost = 'expenses-tracker-pxpp.vercel.app'
-  const hostname = request.nextUrl.hostname
+  const canonicalUrlStr =
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL || process.env.BETTER_AUTH_URL
 
-  const isVercelPreview =
-    hostname.endsWith('.vercel.app') && hostname !== prodHost
+  if (!canonicalUrlStr) {
+    // No canonical origin configured; do nothing.
+    return NextResponse.next()
+  }
 
-  if (isVercelPreview) {
+  let canonical: URL
+  try {
+    canonical = new URL(canonicalUrlStr)
+  } catch {
+    // Malformed env value; skip redirect rather than breaking requests.
+    return NextResponse.next()
+  }
+
+  const reqHost = request.nextUrl.hostname
+  const reqProto = request.nextUrl.protocol.replace(':', '')
+
+  const targetHost = canonical.hostname
+  const targetProto = canonical.protocol.replace(':', '')
+  const targetPort = canonical.port // often empty for https
+
+  const hostMismatch = reqHost !== targetHost
+  const protoMismatch = reqProto !== targetProto
+
+  if (hostMismatch || protoMismatch) {
     const url = new URL(request.url)
-    url.hostname = prodHost
-    url.port = '' // ensure default HTTPS port
+    url.protocol = canonical.protocol
+    url.hostname = targetHost
+    url.port = targetPort // '' keeps default port
     return NextResponse.redirect(url, 308)
   }
 
