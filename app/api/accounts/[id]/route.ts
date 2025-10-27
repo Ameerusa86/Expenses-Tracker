@@ -5,10 +5,14 @@ import { accountUpdateSchema } from '@/schemas/account'
 import { getUserId } from '@/lib/auth'
 import { Types } from 'mongoose'
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(
+  _: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   await dbConnect()
   const userId = await getUserId()
-  const _id = new Types.ObjectId(params.id)
+  const { id } = await params
+  const _id = new Types.ObjectId(id)
   const item = await Account.findOne({ _id, userId }).lean()
   if (!item) return NextResponse.json({ error: 'Not found' }, { status: 404 })
   return NextResponse.json({ item })
@@ -16,11 +20,12 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   await dbConnect()
   const userId = await getUserId()
-  const _id = new Types.ObjectId(params.id)
+  const { id } = await params
+  const _id = new Types.ObjectId(id)
   const body = await req.json()
   const parsed = accountUpdateSchema.safeParse(body)
   if (!parsed.success)
@@ -36,11 +41,12 @@ export async function PUT(
 
 export async function DELETE(
   _: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   await dbConnect()
   const userId = await getUserId()
-  const _id = new Types.ObjectId(params.id)
+  const { id } = await params
+  const _id = new Types.ObjectId(id)
   const del = await Account.deleteOne({ _id, userId })
   return NextResponse.json({ ok: del.deletedCount === 1 })
 }
