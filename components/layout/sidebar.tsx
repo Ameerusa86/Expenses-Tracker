@@ -1,11 +1,20 @@
 'use client'
 
 import Link from 'next/link'
-import { Home, PieChart, Wallet, Settings } from 'lucide-react'
+import {
+  Home,
+  PieChart,
+  Settings,
+  Receipt,
+  Briefcase,
+  Tags,
+} from 'lucide-react'
 
 const links = [
   { name: 'Dashboard', icon: Home, href: '/dashboard' },
-  { name: 'Expenses', icon: Wallet, href: '/expenses' },
+  { name: 'Transactions', icon: Receipt, href: '/transactions' },
+  { name: 'Accounts', icon: Briefcase, href: '/accounts' },
+  { name: 'Categories', icon: Tags, href: '/categories' },
   { name: 'Reports', icon: PieChart, href: '/reports' },
   { name: 'Settings', icon: Settings, href: '/settings' },
 ]
