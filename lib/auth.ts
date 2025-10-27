@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { MongoClient } from 'mongodb'
 import { mongodbAdapter } from 'better-auth/adapters/mongodb'
+import { headers } from 'next/headers'
 
 const client = new MongoClient(
   process.env.DATABASE_URL ||
@@ -24,3 +25,20 @@ export const auth = betterAuth({
     },
   },
 })
+
+/**
+ * Get the authenticated user's ID from the current session
+ * @throws {Error} If user is not authenticated
+ * @returns {Promise<string>} The user's ID
+ */
+export async function getUserId(): Promise<string> {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session?.user?.id) {
+    throw new Error('Unauthorized: User not authenticated')
+  }
+
+  return session.user.id
+}
