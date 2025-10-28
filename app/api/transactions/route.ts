@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { dbConnect } from '@/lib/db'
 import { Transaction } from '@/models/Transaction'
+import type { TransactionDoc } from '@/models/Transaction'
+import type { FilterQuery } from 'mongoose'
+import { Types } from 'mongoose'
 import { transactionCreateSchema } from '@/schemas/transaction'
 import { getUserId } from '@/lib/auth'
 
@@ -11,8 +14,10 @@ export async function GET(req: Request) {
   const accountId = searchParams.get('accountId')
   const limit = Number(searchParams.get('limit') || 50)
   const page = Number(searchParams.get('page') || 1)
-  const query: any = { userId }
-  if (accountId) query.accountId = accountId
+  const query: FilterQuery<TransactionDoc> = {
+    userId: new Types.ObjectId(userId),
+  }
+  if (accountId) query.accountId = new Types.ObjectId(accountId)
 
   const items = await Transaction.find(query)
     .sort({ date: -1, createdAt: -1 })
@@ -40,7 +45,7 @@ export async function POST(req: Request) {
     })
     await session.commitTransaction()
     return NextResponse.json({ item: doc[0] }, { status: 201 })
-  } catch (e) {
+  } catch {
     await session.abortTransaction()
     return NextResponse.json({ error: 'Create failed' }, { status: 500 })
   } finally {

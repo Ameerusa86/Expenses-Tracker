@@ -40,12 +40,14 @@ interface TransactionFormProps {
   transaction?: Transaction
   accounts: Account[]
   categories: Category[]
+  onSuccess?: () => void
 }
 
 export function TransactionForm({
   transaction,
   accounts,
   categories,
+  onSuccess,
 }: TransactionFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -80,7 +82,7 @@ export function TransactionForm({
         toast.success('Transaction created successfully')
       }
 
-      router.push('/transactions')
+      onSuccess?.()
       router.refresh()
     } catch (error) {
       toast.error(
@@ -127,33 +129,34 @@ export function TransactionForm({
     : 'expense'
 
   return (
-    <Card className="p-6">
-      <form action={handleSubmit} className="space-y-6">
-        {/* Transaction Type */}
-        <div className="space-y-2">
-          <Label htmlFor="type">Transaction Type</Label>
-          <select
-            id="type"
-            name="type"
-            defaultValue={defaultType}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            required
-          >
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-          </select>
-        </div>
+    <Card className="p-4 sm:p-6">
+      <form action={handleSubmit} className="space-y-4 sm:space-y-6">
+        {/* Transaction Type & Date - Responsive Grid */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="type">Transaction Type</Label>
+            <select
+              id="type"
+              name="type"
+              defaultValue={defaultType}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              required
+            >
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
 
-        {/* Date */}
-        <div className="space-y-2">
-          <Label htmlFor="date">Date</Label>
-          <Input
-            id="date"
-            name="date"
-            type="date"
-            defaultValue={defaultDate}
-            required
-          />
+          <div className="space-y-2">
+            <Label htmlFor="date">Date</Label>
+            <Input
+              id="date"
+              name="date"
+              type="date"
+              defaultValue={defaultDate}
+              required
+            />
+          </div>
         </div>
 
         {/* Amount */}
@@ -171,41 +174,42 @@ export function TransactionForm({
           />
         </div>
 
-        {/* Account */}
-        <div className="space-y-2">
-          <Label htmlFor="accountId">Account</Label>
-          <select
-            id="accountId"
-            name="accountId"
-            defaultValue={transaction?.accountId || ''}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            required
-          >
-            <option value="">Select an account</option>
-            {accounts.map((account) => (
-              <option key={account._id} value={account._id}>
-                {account.name} ({account.type})
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Account & Category - Responsive Grid */}
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="accountId">Account</Label>
+            <select
+              id="accountId"
+              name="accountId"
+              defaultValue={transaction?.accountId || ''}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              required
+            >
+              <option value="">Select an account</option>
+              {accounts.map((account) => (
+                <option key={account._id} value={account._id}>
+                  {account.name} ({account.type})
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* Category */}
-        <div className="space-y-2">
-          <Label htmlFor="categoryId">Category (Optional)</Label>
-          <select
-            id="categoryId"
-            name="categoryId"
-            defaultValue={transaction?.categoryId || ''}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          >
-            <option value="">Uncategorized</option>
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.name} ({category.type})
-              </option>
-            ))}
-          </select>
+          <div className="space-y-2">
+            <Label htmlFor="categoryId">Category (Optional)</Label>
+            <select
+              id="categoryId"
+              name="categoryId"
+              defaultValue={transaction?.categoryId || ''}
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <option value="">Uncategorized</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name} ({category.type})
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Payee */}
@@ -247,9 +251,13 @@ export function TransactionForm({
           </select>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3">
-          <Button type="submit" disabled={isSubmitting} className="flex-1">
+        {/* Action Buttons - Responsive */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="flex-1 order-1"
+          >
             {isSubmitting
               ? isEditing
                 ? 'Updating...'
@@ -264,6 +272,7 @@ export function TransactionForm({
             variant="outline"
             onClick={() => router.back()}
             disabled={isSubmitting || isDeleting}
+            className="order-2 sm:order-2"
           >
             Cancel
           </Button>
@@ -274,6 +283,7 @@ export function TransactionForm({
               variant="destructive"
               onClick={handleDelete}
               disabled={isSubmitting || isDeleting}
+              className="order-3"
             >
               {isDeleting ? 'Deleting...' : 'Delete'}
             </Button>

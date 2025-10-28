@@ -2,6 +2,7 @@ import { dbConnect } from '@/lib/db'
 import { Account } from '@/models/Account'
 import { getUserId } from '@/lib/auth'
 import { notFound, redirect } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -114,8 +115,8 @@ export default async function EditAccountPage({
               <option value="AUD">AUD — Australian Dollar</option>
               <option value="INR">INR — Indian Rupee</option>
               <option value="SAR">SAR — Saudi Riyal</option>
-              <option value="AED">AED — UAE Dirham</option>
-              <option value="EGP">EGP — Egyptian Pound</option>
+              <option value="AED">UAE Dirham</option>
+              <option value="EGP">Egyptian Pound</option>
             </select>
           </div>
 
@@ -123,11 +124,11 @@ export default async function EditAccountPage({
             <Button type="submit" className="flex-1">
               Save changes
             </Button>
-            <a href="/accounts">
+            <Link href="/accounts">
               <Button type="button" variant="outline">
                 Cancel
               </Button>
-            </a>
+            </Link>
           </div>
         </form>
 
