@@ -18,6 +18,7 @@ const links = [
   { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
   { name: 'Transactions', icon: Receipt, href: '/transactions' },
   { name: 'Accounts', icon: Wallet, href: '/accounts' },
+  { name: 'Credit & Loans', icon: Wallet, href: '/credit-loans' },
   { name: 'Categories', icon: Tags, href: '/categories' },
   { name: 'Reports', icon: FileText, href: '/reports' },
   { name: 'Settings', icon: Settings, href: '/settings' },
