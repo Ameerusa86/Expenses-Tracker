@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ExpenseFlow
+
+ExpenseFlow is a Next.js 16 (App Router) expense tracking SaaS using MongoDB (Mongoose) and Better Auth. This fork adds a Credit & Loans feature to track credit cards and loans, balances, and payments.
 
 ## Getting Started
 
@@ -16,9 +18,38 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Key authenticated routes live under `app/(dashboard)/*`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Credit & Loans
+
+Track credit cards and loans with current balance, credit limit, APR, minimum payment, and payment history.
+
+- Pages
+  - List: `/credit-loans`
+  - Detail: `/credit-loans/[id]`
+
+- Create/Update via Server Actions
+  - Create credit/loan: `createLiability(input)` in `app/actions/liabilities.ts`
+  - Add payment: `createLiabilityPayment(input)` in `app/actions/liability-payments.ts`
+
+- Query via API
+  - List: `GET /api/liabilities?type=credit-card|loan&page=1&limit=20`
+  - Item: `GET /api/liabilities/[id]`
+
+- Data model (Mongoose)
+  - `models/Liability.ts`: `{ type: 'credit-card'|'loan', name, institution?, balanceCents, creditLimitCents?, interestRateAPR?, minPaymentCents?, statementDay?, dueDay?, nextDueDate?, lastPaymentDate?, status: 'open'|'closed', userId }`
+  - `models/LiabilityPayment.ts`: `{ liabilityId, amountCents, date, notes?, userId }`
+
+- UI Components (shadcn/ui)
+  - `components/credit-loans/add-credit-loan-modal.tsx`
+  - `components/credit-loans/add-payment-modal.tsx`
+
+Notes
+
+- Monetary values are stored as integer cents. Use `utils/money.ts` for conversions and formatting.
+- Legacy routes `/liabilities` and `/liabilities/[id]` now redirect to `/credit-loans` equivalents.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font).
 
 ## Learn More
 
