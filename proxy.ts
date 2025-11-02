@@ -4,6 +4,11 @@ import { NextResponse } from 'next/server'
 // Canonicalize to the origin defined by env, regardless of hosting provider.
 // This keeps auth cookies and OAuth callback origins consistent on Vercel, Netlify, etc.
 export default function proxy(request: NextRequest) {
+  // Skip canonical redirects in development to avoid bouncing to production URLs
+  if (process.env.NODE_ENV !== 'production') {
+    return NextResponse.next()
+  }
+
   const canonicalUrlStr =
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL || process.env.BETTER_AUTH_URL
 
