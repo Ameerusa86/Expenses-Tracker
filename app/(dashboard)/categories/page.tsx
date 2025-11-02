@@ -119,7 +119,7 @@ export default async function CategoriesPage() {
                           key={category._id}
                           className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
                         >
-                          <div className="absolute inset-0 bg-linear-to-br from-green-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <div className="relative p-5 sm:p-6 space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
@@ -174,7 +174,7 @@ export default async function CategoriesPage() {
                           key={category._id}
                           className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
                         >
-                          <div className="absolute inset-0 bg-linear-to-br from-red-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <div className="relative p-5 sm:p-6 space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
@@ -231,7 +231,7 @@ export default async function CategoriesPage() {
                           key={category._id}
                           className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
                         >
-                          <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <div className="relative p-5 sm:p-6 space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">

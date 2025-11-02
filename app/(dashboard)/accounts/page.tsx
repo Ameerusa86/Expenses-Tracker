@@ -120,10 +120,10 @@ export default async function AccountsPage() {
                   return (
                     <Card
                       key={account._id}
-                      className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+                      className="group relative overflow-hidden transition-all duration-300 hover:shadow-elevated"
                     >
                       {/* Gradient Background */}
-                      <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                       <div className="relative p-5 sm:p-6 space-y-4">
                         {/* Header */}

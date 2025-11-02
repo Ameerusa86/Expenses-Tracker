@@ -87,21 +87,21 @@ export function AddCategoryModal() {
           <span>Add Category</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] p-0 gap-0 overflow-hidden border-0 shadow-2xl">
+      <DialogContent className="sm:max-w-[550px] p-0 gap-0 overflow-hidden border border-border/60 bg-surface/95 shadow-elevated">
         {/* Animated Header with gradient */}
-        <div className="relative bg-linear-to-br from-primary via-primary to-primary/90 px-6 sm:px-8 py-10 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-primary via-primary to-primary/90 px-6 py-10 sm:px-8 overflow-hidden">
           {/* Decorative elements */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full blur-2xl" />
+          <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-primary-foreground/15 blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-primary-foreground/15 blur-2xl" />
 
           <DialogHeader className="relative space-y-3">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm ring-4 ring-white/30">
-              <Sparkles className="h-7 w-7 text-white" />
+            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/20 backdrop-blur-sm ring-4 ring-primary-foreground/30">
+              <Sparkles className="h-7 w-7 text-primary-foreground" />
             </div>
-            <DialogTitle className="text-3xl font-bold text-white">
+            <DialogTitle className="text-3xl font-bold text-primary-foreground">
               Create New Category
             </DialogTitle>
-            <p className="text-white/90 text-base">
+            <p className="text-primary-foreground/85 text-base">
               Organize your transactions with custom categories
             </p>
           </DialogHeader>
@@ -110,7 +110,7 @@ export function AddCategoryModal() {
         {/* Form content with enhanced styling */}
         <form
           onSubmit={handleSubmit}
-          className="p-6 sm:p-8 space-y-7 bg-background"
+          className="space-y-7 bg-surface p-6 sm:p-8"
         >
           {/* Category Name */}
           <div className="space-y-3">
@@ -162,7 +162,7 @@ export function AddCategoryModal() {
                     <div
                       className={`h-12 w-12 rounded-xl flex items-center justify-center ${
                         isSelected
-                          ? `bg-linear-to-br ${type.color} shadow-lg`
+                          ? `bg-gradient-to-br ${type.color} shadow-lg`
                           : 'bg-muted'
                       }`}
                     >

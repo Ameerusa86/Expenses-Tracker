@@ -1,6 +1,9 @@
 import type { Config } from 'tailwindcss'
 import tailwindcssAnimate from 'tailwindcss-animate'
 
+const withOpacity = (variable: string) =>
+  `oklch(var(${variable}) / <alpha-value>)`
+
 const config: Config = {
   darkMode: 'class',
   content: [
@@ -18,50 +21,56 @@ const config: Config = {
     },
     extend: {
       boxShadow: {
-        glow: '0 20px 45px -25px rgba(70, 37, 222, 0.35)',
-        soft: '0 25px 45px -30px rgba(16, 24, 40, 0.2)',
+        glow: '0 22px 60px -28px rgba(76, 46, 255, 0.35)',
+        soft: '0 28px 60px -34px rgba(15, 23, 42, 0.18)',
+        elevated: '0 30px 80px -45px rgba(12, 20, 38, 0.35)',
       },
       backgroundImage: {
         'frosted-card':
-          'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.65))',
+          'linear-gradient(140deg, color-mix(in oklch, oklch(var(--surface)) 94%, transparent), color-mix(in oklch, oklch(var(--surface-muted)) 86%, transparent))',
         'frosted-card-dark':
-          'linear-gradient(135deg, rgba(26,24,49,0.85), rgba(26,24,49,0.65))',
+          'linear-gradient(140deg, color-mix(in oklch, oklch(var(--surface)) 88%, transparent), color-mix(in oklch, oklch(var(--surface-muted)) 82%, transparent))',
         'focus-ring':
           'radial-gradient(circle at center, rgba(103, 80, 255, 0.45), transparent 70%)',
       },
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        border: withOpacity('--border'),
+        input: withOpacity('--input'),
+        ring: withOpacity('--ring'),
+        background: withOpacity('--background'),
+        foreground: withOpacity('--foreground'),
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: withOpacity('--primary'),
+          foreground: withOpacity('--primary-foreground'),
         },
         secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
+          DEFAULT: withOpacity('--secondary'),
+          foreground: withOpacity('--secondary-foreground'),
         },
         destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+          DEFAULT: withOpacity('--destructive'),
+          foreground: withOpacity('--destructive-foreground'),
         },
         muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
+          DEFAULT: withOpacity('--muted'),
+          foreground: withOpacity('--muted-foreground'),
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
+          DEFAULT: withOpacity('--accent'),
+          foreground: withOpacity('--accent-foreground'),
         },
         popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
+          DEFAULT: withOpacity('--popover'),
+          foreground: withOpacity('--popover-foreground'),
         },
         card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
+          DEFAULT: withOpacity('--card'),
+          foreground: withOpacity('--card-foreground'),
+        },
+        surface: {
+          DEFAULT: withOpacity('--surface'),
+          foreground: withOpacity('--surface-foreground'),
+          muted: withOpacity('--surface-muted'),
         },
       },
       borderRadius: {
