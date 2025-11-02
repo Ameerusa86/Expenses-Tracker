@@ -35,14 +35,14 @@ export function Navbar({ user }: { user: UserLite | null }) {
   const initial = (user?.name ?? user?.email ?? 'U').charAt(0).toUpperCase()
   return (
     <header className="sticky top-0 z-40 mx-auto w-full max-w-[1500px] px-4 pt-4 sm:px-6 lg:px-10">
-      <div className="flex h-16 items-center justify-between gap-3 rounded-2xl border border-white/60 bg-white/80 px-3 shadow-soft backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:border-white/10 dark:bg-background/70 dark:shadow-none sm:px-5">
+      <div className="flex h-16 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-surface/90 px-3 shadow-soft backdrop-blur-lg supports-[backdrop-filter]:bg-surface/85 dark:border-border/60 dark:bg-surface/65 sm:px-5">
         <div className="flex flex-1 items-center gap-3">
           <Sheet>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="md:hidden rounded-xl bg-white/80 shadow-sm hover:bg-white dark:bg-white/5"
+                className="md:hidden rounded-xl bg-surface/90 shadow-sm hover:bg-surface/80 dark:bg-surface/60"
                 aria-label="Open menu"
               >
                 <Menu className="h-5 w-5" />
@@ -57,7 +57,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
           </Sheet>
 
           <Link href="/" className="flex items-center gap-2.5 md:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-glow">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-glow">
               <TrendingUp className="h-5 w-5" />
             </div>
             <span className="text-lg font-semibold tracking-tight">
@@ -66,7 +66,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
           </Link>
 
           <div className="hidden flex-1 items-center justify-end lg:flex">
-            <div className="relative flex w-full max-w-md items-center rounded-2xl border border-white/60 bg-white/70 px-4 py-2 shadow-inner focus-within:ring-2 focus-within:ring-ring dark:border-white/10 dark:bg-background/80">
+            <div className="relative flex w-full max-w-md items-center rounded-2xl border border-border/60 bg-surface/85 px-4 py-2 shadow-inner focus-within:ring-2 focus-within:ring-ring dark:border-border/60 dark:bg-surface/60">
               <Search className="mr-3 h-4 w-4 text-muted-foreground" />
               <input
                 type="search"
@@ -81,7 +81,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden rounded-xl bg-white/80 shadow-sm hover:bg-white dark:bg-white/5"
+            className="lg:hidden rounded-xl bg-surface/90 shadow-sm hover:bg-surface/80 dark:bg-surface/60"
           >
             <Search className="h-5 w-5" />
           </Button>
@@ -89,7 +89,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
           <Button
             variant="ghost"
             size="icon"
-            className="relative rounded-xl bg-white/80 shadow-sm hover:bg-white dark:bg-white/5"
+            className="relative rounded-xl bg-surface/90 shadow-sm hover:bg-surface/80 dark:bg-surface/60"
           >
             <Bell className="h-5 w-5" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary shadow-[0_0_0_2px] shadow-background" />
@@ -100,13 +100,13 @@ export function Navbar({ user }: { user: UserLite | null }) {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="ml-1 rounded-full border border-white/60 p-0.5 transition hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background dark:border-white/10">
+                <button className="ml-1 rounded-full border border-border/60 p-0.5 transition hover:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 focus:ring-offset-background dark:border-border/60">
                   <Avatar className="h-9 w-9 border border-transparent shadow-sm">
                     <AvatarImage
                       src={user.image ?? undefined}
                       alt={user.name ?? 'User'}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground font-semibold">
+                    <AvatarFallback className="bg-gradient-to-br from-primary to-primary/75 text-primary-foreground font-semibold">
                       {initial}
                     </AvatarFallback>
                   </Avatar>
@@ -114,16 +114,16 @@ export function Navbar({ user }: { user: UserLite | null }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-64 rounded-2xl border border-white/60 bg-white/90 p-2 shadow-lg backdrop-blur dark:border-white/10 dark:bg-background/90"
+                className="w-64 rounded-2xl border border-border/60 bg-surface/95 p-2 shadow-lg backdrop-blur-lg dark:border-border/60 dark:bg-surface/75"
               >
                 <DropdownMenuLabel className="pb-2">
                   <div className="flex items-center gap-3">
-                    <Avatar className="h-10 w-10 border border-white/60">
+                    <Avatar className="h-10 w-10 border border-border/60">
                       <AvatarImage
                         src={user.image ?? undefined}
                         alt={user.name ?? 'User'}
                       />
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/70 text-primary-foreground font-semibold">
+                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/75 text-primary-foreground font-semibold">
                         {initial}
                       </AvatarFallback>
                     </Avatar>
@@ -163,7 +163,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
                       },
                     })
                   }}
-                  className="cursor-pointer rounded-lg py-2 text-red-600 focus:bg-red-50 focus:text-red-600 dark:text-red-400 dark:focus:bg-red-950/40"
+                  className="cursor-pointer rounded-lg py-2 text-destructive focus:bg-destructive/10 focus:text-destructive dark:text-destructive dark:focus:bg-destructive/20"
                 >
                   <LogOut className="mr-3 h-4 w-4" />
                   <span>Sign out</span>

@@ -88,9 +88,9 @@ export default async function CreditLoansPage() {
                 return (
                   <Card
                     key={l._id}
-                    className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+                    className="group relative overflow-hidden transition-all duration-300 hover:shadow-elevated"
                   >
-                    <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     <div className="relative p-5 sm:p-6 space-y-4">
                       <div className="flex items-start gap-3">
                         <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">

@@ -73,43 +73,43 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="grid w-full max-w-5xl gap-6 rounded-[2.5rem] border border-white/50 bg-white/80 p-6 shadow-soft backdrop-blur-lg dark:border-white/10 dark:bg-background/80 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:p-12">
-        <div className="relative hidden overflow-hidden rounded-[2rem] border border-white/40 bg-gradient-to-br from-primary/90 via-primary/75 to-indigo-500 p-10 text-primary-foreground shadow-[0_40px_100px_-45px_rgba(58,16,149,0.7)] lg:flex lg:flex-col lg:justify-between">
-          <div className="absolute inset-x-10 top-8 h-44 rounded-full bg-white/10 blur-3xl" />
+      <div className="grid w-full max-w-5xl gap-6 rounded-[2.5rem] border border-border/60 bg-surface/95 p-6 shadow-elevated backdrop-blur-2xl dark:border-border/60 dark:bg-surface/70 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:p-12">
+        <div className="relative hidden overflow-hidden rounded-[2rem] border border-primary/35 bg-gradient-to-br from-primary/90 via-primary/78 to-indigo-500 p-10 text-primary-foreground shadow-[0_40px_100px_-45px_rgba(58,16,149,0.7)] lg:flex lg:flex-col lg:justify-between">
+          <div className="absolute inset-x-10 top-8 h-44 rounded-full bg-primary-foreground/15 blur-3xl" />
           <div className="relative space-y-6">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
               Start smarter
             </span>
             <h2 className="text-3xl font-semibold tracking-tight">
               Everything you need to get ahead of your finances.
             </h2>
-            <ul className="space-y-3 text-sm text-white/75">
+            <ul className="space-y-3 text-sm text-primary-foreground/80">
               <li className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-white" /> Custom
-                categories and smart tags
+                <span className="h-2 w-2 rounded-full bg-primary-foreground/80" />{' '}
+                Custom categories and smart tags
               </li>
               <li className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-white" /> Powerful
-                insights with live dashboards
+                <span className="h-2 w-2 rounded-full bg-primary-foreground/80" />{' '}
+                Powerful insights with live dashboards
               </li>
               <li className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-white" /> Forecast
-                tools for confident planning
+                <span className="h-2 w-2 rounded-full bg-primary-foreground/80" />{' '}
+                Forecast tools for confident planning
               </li>
             </ul>
           </div>
-          <div className="relative mt-8 rounded-2xl border border-white/30 bg-white/10 p-5 text-sm text-white/80 backdrop-blur">
+          <div className="relative mt-8 rounded-2xl border border-primary-foreground/25 bg-primary-foreground/15 p-5 text-sm text-primary-foreground/80 backdrop-blur">
             <p className="font-medium">
               “Creating an account took minutes and immediately simplified our
               monthly reporting.”
             </p>
-            <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white/60">
+            <p className="mt-3 text-xs uppercase tracking-[0.2em] text-primary-foreground/70">
               — Daniel, Operations
             </p>
           </div>
         </div>
 
-        <Card className="h-full border border-white/60 bg-white/90 px-6 py-8 shadow-soft dark:border-white/10 dark:bg-background/85 sm:px-8">
+        <Card className="h-full border border-border/60 bg-surface/95 px-6 py-8 shadow-soft dark:border-border/60 dark:bg-surface/70 sm:px-8">
           <CardHeader className="space-y-4 border-none px-0">
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight">
@@ -145,7 +145,7 @@ export default function RegisterPage() {
 
             <div className="relative">
               <Separator className="bg-muted" />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs text-muted-foreground shadow-sm dark:bg-background">
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface/95 px-3 py-1 text-xs text-muted-foreground shadow-sm dark:bg-surface/70">
                 or sign up with email
               </span>
             </div>
