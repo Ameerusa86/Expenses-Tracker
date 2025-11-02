@@ -39,33 +39,32 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
   }
 
   const containerClasses = isMobile
-    ? 'flex w-full flex-col bg-background'
-    : 'hidden md:flex md:w-64 lg:w-72 flex-col border-r bg-muted/30'
+    ? 'flex h-full w-full flex-col bg-gradient-to-b from-background via-background/95 to-background/90 text-foreground'
+    : 'hidden md:flex md:w-[260px] lg:w-[280px] flex-col border-r border-black/5 bg-white/90 backdrop-blur-xl dark:border-white/5 dark:bg-[#080d18]/85'
 
   const contentClasses = isMobile
-    ? 'flex flex-col h-full'
-    : 'sticky top-0 flex flex-col h-screen'
+    ? 'flex h-full flex-col overflow-y-auto px-5 pb-10 pt-8'
+    : 'sticky top-0 flex h-screen flex-col px-3 pb-6 pt-8'
 
   return (
     <aside className={containerClasses}>
       <div className={contentClasses}>
-        {/* Logo/Brand Section */}
-        <div className="flex items-center gap-3 px-6 py-6 border-b bg-background">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
+        <div className="flex items-center gap-3 rounded-2xl border border-black/5 bg-white/95 px-5 py-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-[#0f1424]/85">
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-glow">
             <TrendingUp className="h-6 w-6" />
+            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px] shadow-white/80 dark:shadow-[#05070c]" />
           </div>
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold leading-none tracking-tight">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground">
               ExpenseFlow
             </h1>
-            <p className="text-xs text-muted-foreground mt-1">
-              Manage your finances
+            <p className="text-xs text-muted-foreground">
+              Command your cashflow
             </p>
           </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="flex-1 overflow-y-auto px-3 py-6">
+        <nav className="mt-6 flex-1 overflow-y-auto">
           <div className="flex flex-col gap-1.5">
             {links.map(({ name, icon: Icon, href }) => {
               const active = isActive(href)
@@ -74,14 +73,14 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
                   key={name}
                   href={href}
                   className={cn(
-                    'group relative flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200',
+                    'group relative flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200',
                     active
-                      ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                      ? 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-glow'
+                      : 'text-muted-foreground hover:bg-white/95 hover:text-foreground dark:text-muted-foreground dark:hover:bg-[#111833] dark:hover:text-foreground',
                   )}
                 >
                   {active && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 rounded-r-full bg-primary-foreground/40" />
+                    <div className="absolute -left-2 h-10 w-10 rounded-full bg-primary/30 blur-xl" />
                   )}
                   <Icon
                     className={cn(
@@ -93,7 +92,7 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
                   />
                   <span className="truncate">{name}</span>
                   {active && (
-                    <div className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-foreground/60 animate-pulse" />
+                    <div className="ml-auto h-2 w-2 rounded-full bg-white/90" />
                   )}
                 </Link>
               )
@@ -101,28 +100,25 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
           </div>
         </nav>
 
-        {/* Footer Section */}
         {!isMobile && (
-          <div className="border-t bg-background px-3 py-4">
-            <div className="rounded-xl bg-primary/5 border border-primary/10 p-4">
-              <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                  <PieChart className="h-5 w-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground">
-                    Need Help?
-                  </p>
-                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
-                    Check our documentation for guides
-                  </p>
-                  <Link
-                    href="/docs"
-                    className="mt-2 inline-flex text-xs font-medium text-primary hover:underline"
-                  >
-                    View Docs →
-                  </Link>
-                </div>
+          <div className="mt-6 rounded-2xl border border-black/5 bg-gradient-to-br from-white/95 to-white/80 p-4 shadow-inner dark:border-white/10 dark:from-[#0f1424]/80 dark:to-[#101831]/70">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
+                <PieChart className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-foreground">
+                  Need help?
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                  Browse our guides and best practices
+                </p>
+                <Link
+                  href="/docs"
+                  className="mt-3 inline-flex text-xs font-medium text-primary hover:underline"
+                >
+                  View docs
+                </Link>
               </div>
             </div>
           </div>
