@@ -11,24 +11,30 @@ export function DeleteCategoryButton({ categoryId }: { categoryId: string }) {
   const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter()
 
-  async function handleDelete() {
-    const confirmed = confirm(
-      'Are you sure you want to delete this category? This action cannot be undone.',
-    )
-
-    if (!confirmed) return
-
-    setIsDeleting(true)
-    try {
-      await deleteCategory(categoryId)
-      toast.success('Category deleted successfully')
-      router.push('/categories')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to delete category')
-      console.error(error)
-      setIsDeleting(false)
-    }
+  function handleDelete() {
+    toast('Are you sure you want to delete this category?', {
+      description: 'This action cannot be undone.',
+      action: {
+        label: 'Delete',
+        onClick: async () => {
+          setIsDeleting(true)
+          try {
+            await deleteCategory(categoryId)
+            toast.success('Category deleted successfully')
+            router.push('/categories')
+            router.refresh()
+          } catch (error) {
+            toast.error('Failed to delete category')
+            console.error(error)
+            setIsDeleting(false)
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {},
+      },
+    })
   }
 
   return (

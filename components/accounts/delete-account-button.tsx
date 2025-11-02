@@ -11,24 +11,30 @@ export function DeleteAccountButton({ accountId }: { accountId: string }) {
   const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter()
 
-  async function handleDelete() {
-    const confirmed = confirm(
-      'Are you sure you want to delete this account? This action cannot be undone.',
-    )
-
-    if (!confirmed) return
-
-    setIsDeleting(true)
-    try {
-      await deleteAccount(accountId)
-      toast.success('Account deleted successfully')
-      router.push('/accounts')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to delete account')
-      console.error(error)
-      setIsDeleting(false)
-    }
+  function handleDelete() {
+    toast('Are you sure you want to delete this account?', {
+      description: 'This action cannot be undone.',
+      action: {
+        label: 'Delete',
+        onClick: async () => {
+          setIsDeleting(true)
+          try {
+            await deleteAccount(accountId)
+            toast.success('Account deleted successfully')
+            router.push('/accounts')
+            router.refresh()
+          } catch (error) {
+            toast.error('Failed to delete account')
+            console.error(error)
+            setIsDeleting(false)
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {},
+      },
+    })
   }
 
   return (

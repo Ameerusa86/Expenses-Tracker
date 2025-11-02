@@ -15,24 +15,30 @@ export function DeleteLiabilityButton({
   const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter()
 
-  async function handleDelete() {
-    const confirmed = confirm(
-      'Are you sure you want to delete this credit/loan? This action cannot be undone.',
-    )
-
-    if (!confirmed) return
-
-    setIsDeleting(true)
-    try {
-      await deleteLiability(liabilityId)
-      toast.success('Credit/Loan deleted successfully')
-      router.push('/credit-loans')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to delete credit/loan')
-      console.error(error)
-      setIsDeleting(false)
-    }
+  function handleDelete() {
+    toast('Are you sure you want to delete this credit/loan?', {
+      description: 'This action cannot be undone.',
+      action: {
+        label: 'Delete',
+        onClick: async () => {
+          setIsDeleting(true)
+          try {
+            await deleteLiability(liabilityId)
+            toast.success('Credit/Loan deleted successfully')
+            router.push('/credit-loans')
+            router.refresh()
+          } catch (error) {
+            toast.error('Failed to delete credit/loan')
+            console.error(error)
+            setIsDeleting(false)
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {},
+      },
+    })
   }
 
   return (

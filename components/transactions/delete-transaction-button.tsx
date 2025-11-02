@@ -15,24 +15,30 @@ export function DeleteTransactionButton({
   const [isDeleting, setIsDeleting] = useState(false)
   const router = useRouter()
 
-  async function handleDelete() {
-    const confirmed = confirm(
-      'Are you sure you want to delete this transaction? This action cannot be undone.',
-    )
-
-    if (!confirmed) return
-
-    setIsDeleting(true)
-    try {
-      await deleteTransaction(transactionId)
-      toast.success('Transaction deleted successfully')
-      router.push('/transactions')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to delete transaction')
-      console.error(error)
-      setIsDeleting(false)
-    }
+  function handleDelete() {
+    toast('Are you sure you want to delete this transaction?', {
+      description: 'This action cannot be undone.',
+      action: {
+        label: 'Delete',
+        onClick: async () => {
+          setIsDeleting(true)
+          try {
+            await deleteTransaction(transactionId)
+            toast.success('Transaction deleted successfully')
+            router.push('/transactions')
+            router.refresh()
+          } catch (error) {
+            toast.error('Failed to delete transaction')
+            console.error(error)
+            setIsDeleting(false)
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {},
+      },
+    })
   }
 
   return (
