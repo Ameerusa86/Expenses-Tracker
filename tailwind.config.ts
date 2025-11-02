@@ -17,6 +17,18 @@ const config: Config = {
       },
     },
     extend: {
+      boxShadow: {
+        glow: '0 20px 45px -25px rgba(70, 37, 222, 0.35)',
+        soft: '0 25px 45px -30px rgba(16, 24, 40, 0.2)',
+      },
+      backgroundImage: {
+        'frosted-card':
+          'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.65))',
+        'frosted-card-dark':
+          'linear-gradient(135deg, rgba(26,24,49,0.85), rgba(26,24,49,0.65))',
+        'focus-ring':
+          'radial-gradient(circle at center, rgba(103, 80, 255, 0.45), transparent 70%)',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
