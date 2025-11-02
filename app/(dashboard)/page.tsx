@@ -97,14 +97,14 @@ export default async function DashboardPage() {
               <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
                 Welcome back, {name}
               </h1>
-              <p className="max-w-xl text-sm text-white/75 sm:text-base">
+              <p className="max-w-xl text-sm text-black/75 sm:text-base">
                 Stay ahead of your spending with real-time tracking, category
                 insights, and guided budgets built to scale with you.
               </p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl border border-white/20 bg-white/15 p-4 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.2em] text-white/70">
+                <p className="text-xs uppercase tracking-[0.2em] text-black/70">
                   This month&apos;s income
                 </p>
                 <p className="mt-3 text-3xl font-semibold">
