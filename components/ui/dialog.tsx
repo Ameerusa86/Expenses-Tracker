@@ -60,13 +60,14 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          'fixed left-1/2 top-1/2 z-50 grid w-full max-h-[calc(100vh-3rem)] max-w-[min(640px,calc(100%-1.5rem))] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-[1.75rem] border border-border/60 bg-surface/95 p-6 shadow-elevated backdrop-blur-2xl duration-200 dark:border-border/60 dark:bg-surface/75 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:p-8',
-          'overflow-y-auto sm:max-h-[calc(100vh-6rem)]',
+          'fixed left-1/2 top-1/2 z-50 flex w-full max-h-[calc(100vh-2rem)] max-w-[min(640px,calc(100%-1.5rem))] -translate-x-1/2 -translate-y-1/2 flex-col rounded-[1.75rem] border border-border/60 bg-surface/95 shadow-elevated backdrop-blur-2xl duration-200 dark:border-border/60 dark:bg-surface/75 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:max-h-[calc(100vh-4rem)]',
           className,
         )}
         {...props}
       >
-        {children}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-6 sm:px-8 sm:py-8">
+          {children}
+        </div>
         {showCloseButton && (
           <DialogPrimitive.Close
             data-slot="dialog-close"
@@ -85,7 +86,10 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn('flex flex-col gap-2 text-center sm:text-left', className)}
+      className={cn(
+        'flex flex-col gap-2 text-center sm:text-left mb-4',
+        className,
+      )}
       {...props}
     />
   )
@@ -96,7 +100,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
+        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end mt-6',
         className,
       )}
       {...props}

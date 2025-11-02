@@ -102,7 +102,7 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
 
         {!isMobile && (
           <div className="mt-6 rounded-2xl border border-border/60 bg-surface/88 p-4 shadow-inner dark:border-border/60 dark:bg-surface/60">
-            <div className="flex items-start gap-3">
+            {/* <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
                 <PieChart className="h-5 w-5" />
               </div>
@@ -120,7 +120,7 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
                   View docs
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
