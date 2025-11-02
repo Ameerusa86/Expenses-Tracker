@@ -14,6 +14,7 @@ export function DeleteAccountButton({ accountId }: { accountId: string }) {
   function handleDelete() {
     toast('Are you sure you want to delete this account?', {
       description: 'This action cannot be undone.',
+      duration: 5000,
       action: {
         label: 'Delete',
         onClick: async () => {

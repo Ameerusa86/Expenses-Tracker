@@ -14,6 +14,7 @@ export function DeleteCategoryButton({ categoryId }: { categoryId: string }) {
   function handleDelete() {
     toast('Are you sure you want to delete this category?', {
       description: 'This action cannot be undone.',
+      duration: 5000,
       action: {
         label: 'Delete',
         onClick: async () => {

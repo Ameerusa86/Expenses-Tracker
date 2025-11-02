@@ -18,6 +18,7 @@ export function DeleteLiabilityButton({
   function handleDelete() {
     toast('Are you sure you want to delete this credit/loan?', {
       description: 'This action cannot be undone.',
+      duration: 5000,
       action: {
         label: 'Delete',
         onClick: async () => {
