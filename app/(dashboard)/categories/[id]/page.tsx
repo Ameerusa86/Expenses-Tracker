@@ -128,32 +128,13 @@ export default async function EditCategoryPage({
               {/* Color */}
               <div className="space-y-2">
                 <Label htmlFor="color">Color (optional)</Label>
-                <div className="flex gap-3 items-center">
-                  <Input
-                    id="color"
-                    name="color"
-                    type="color"
-                    defaultValue={typed.color || '#3b82f6'}
-                    className="h-10 w-20 cursor-pointer"
-                  />
-                  <Input
-                    type="text"
-                    defaultValue={typed.color || '#3b82f6'}
-                    placeholder="#3b82f6"
-                    className="flex-1"
-                    onChange={(e) => {
-                      const colorInput = document.getElementById(
-                        'color',
-                      ) as HTMLInputElement
-                      if (
-                        colorInput &&
-                        /^#[0-9A-F]{6}$/i.test(e.target.value)
-                      ) {
-                        colorInput.value = e.target.value
-                      }
-                    }}
-                  />
-                </div>
+                <Input
+                  id="color"
+                  name="color"
+                  type="color"
+                  defaultValue={typed.color || '#3b82f6'}
+                  className="h-10 w-24 cursor-pointer"
+                />
                 <p className="text-xs text-muted-foreground">
                   Choose a color to help identify this category
                 </p>
