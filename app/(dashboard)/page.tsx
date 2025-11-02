@@ -85,200 +85,239 @@ export default async function DashboardPage() {
   const serializedTransactions = JSON.parse(JSON.stringify(recentTransactions))
 
   return (
-    <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-500">
-      {/* Header Section */}
-      <div className="space-y-3">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
-          Welcome back, {name}
-        </h1>
-        <p className="text-base sm:text-lg text-muted-foreground">
-          Track your expenses and manage your budget efficiently
-        </p>
-      </div>
-
-      {/* Monthly Overview - Primary Cards */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-3">
-        <Card className="relative overflow-hidden border-0 shadow-lg bg-emerald-500 dark:bg-emerald-600 text-white">
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
-          <div className="relative p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <TrendingUp className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-emerald-100">
-                  Monthly Income
+    <div className="space-y-8 sm:space-y-10">
+      <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
+        <div className="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-8 text-primary-foreground shadow-[0_30px_90px_-40px_rgba(58,16,149,0.65)]">
+          <div className="absolute inset-y-0 right-0 hidden w-1/2 rounded-l-[5rem] bg-white/10 blur-3xl lg:block" />
+          <div className="relative flex h-full flex-col justify-between gap-8">
+            <div className="space-y-3">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
+                Financial overview
+              </span>
+              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
+                Welcome back, {name}
+              </h1>
+              <p className="max-w-xl text-sm text-white/75 sm:text-base">
+                Stay ahead of your spending with real-time tracking, category
+                insights, and guided budgets built to scale with you.
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/20 bg-white/15 p-4 backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.2em] text-white/70">
+                  This month&apos;s income
                 </p>
-                <p className="text-xs text-emerald-200">
+                <p className="mt-3 text-3xl font-semibold">
+                  {formatCurrency(monthlyIncome)}
+                </p>
+                <p className="mt-1 text-xs text-white/70">
                   {new Date().toLocaleDateString('en-US', {
                     month: 'long',
                     year: 'numeric',
                   })}
                 </p>
               </div>
-            </div>
-            <p className="text-3xl sm:text-4xl font-bold">
-              {formatCurrency(monthlyIncome)}
-            </p>
-          </div>
-        </Card>
-
-        <Card className="relative overflow-hidden border-0 shadow-lg bg-rose-500 dark:bg-rose-600 text-white">
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
-          <div className="relative p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <TrendingDown className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-rose-100">
-                  Monthly Expenses
+              <div className="rounded-2xl border border-white/20 bg-white/15 p-4 backdrop-blur">
+                <p className="text-xs uppercase tracking-[0.2em] text-white/70">
+                  Active accounts
                 </p>
-                <p className="text-xs text-rose-200">
-                  {new Date().toLocaleDateString('en-US', {
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </p>
+                <p className="mt-3 text-3xl font-semibold">{accountsCount}</p>
+                <p className="mt-1 text-xs text-white/70">connected sources</p>
               </div>
             </div>
-            <p className="text-3xl sm:text-4xl font-bold">
-              {formatCurrency(monthlyExpenses)}
-            </p>
           </div>
-        </Card>
+        </div>
 
-        <Card
-          className={`relative overflow-hidden border-0 shadow-lg text-white ${
-            netIncome >= 0
-              ? 'bg-blue-500 dark:bg-blue-600'
-              : 'bg-orange-500 dark:bg-orange-600'
-          }`}
-        >
-          <div className="absolute top-0 right-0 -mt-4 -mr-4 h-24 w-24 rounded-full bg-white/10 blur-2xl" />
-          <div className="relative p-6 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <Wallet className="h-6 w-6" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 text-white shadow-[0_35px_70px_-40px_rgba(16,185,129,0.65)]">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/3 -translate-y-1/2 rounded-full bg-white/20 blur-3xl" />
+            <div className="relative space-y-4 p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
+                  <TrendingUp className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.25em] text-white/70">
+                    Income
+                  </p>
+                  <p className="text-lg font-semibold">
+                    {formatCurrency(monthlyIncome)}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-medium opacity-90">Net Balance</p>
-                <p className="text-xs opacity-75">This Month</p>
-              </div>
+              <p className="text-xs text-white/70">
+                Updated{' '}
+                {new Date().toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
             </div>
-            <p className="text-3xl sm:text-4xl font-bold">
-              {formatCurrency(netIncome)}
-            </p>
-          </div>
-        </Card>
+          </Card>
+
+          <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600 text-white shadow-[0_35px_70px_-40px_rgba(244,63,94,0.6)]">
+            <div className="absolute right-0 top-0 h-28 w-28 translate-x-1/3 -translate-y-1/3 rounded-full bg-white/30 blur-3xl" />
+            <div className="relative space-y-4 p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
+                  <TrendingDown className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.25em] text-white/70">
+                    Expenses
+                  </p>
+                  <p className="text-lg font-semibold">
+                    {formatCurrency(monthlyExpenses)}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-white/70">Across all categories</p>
+            </div>
+          </Card>
+
+          <Card
+            className={`relative overflow-hidden border-0 text-white shadow-[0_35px_70px_-40px_rgba(79,70,229,0.55)] ${
+              netIncome >= 0
+                ? 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700'
+                : 'bg-gradient-to-br from-orange-400 via-orange-500 to-amber-500'
+            }`}
+          >
+            <div className="absolute right-0 top-0 h-28 w-28 translate-x-1/3 -translate-y-1/3 rounded-full bg-white/25 blur-3xl" />
+            <div className="relative space-y-4 p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
+                  <Wallet className="h-6 w-6" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.25em] text-white/70">
+                    Net balance
+                  </p>
+                  <p className="text-lg font-semibold">
+                    {formatCurrency(netIncome)}
+                  </p>
+                </div>
+              </div>
+              <p className="text-xs text-white/70">
+                Difference between income and expenses
+              </p>
+            </div>
+          </Card>
+        </div>
       </div>
 
-      {/* Quick Stats Grid */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3">
-        <Card className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
-          <div className="p-6 space-y-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card className="group border border-white/40 bg-white/80 transition hover:border-primary/40 hover:shadow-glow dark:bg-background/80">
+          <div className="space-y-5 px-6 pb-6">
             <div className="flex items-center justify-between">
-              <div className="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-950 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Wallet className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary transition group-hover:scale-105">
+                <Wallet className="h-6 w-6" />
               </div>
               <Link
                 href="/accounts"
-                className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 View
-                <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Accounts
               </p>
-              <p className="text-3xl font-bold mt-1">{accountsCount}</p>
+              <p className="mt-2 text-3xl font-semibold">{accountsCount}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Linked wallets & banks
+              </p>
             </div>
           </div>
         </Card>
 
-        <Card className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
-          <div className="p-6 space-y-4">
+        <Card className="group border border-white/40 bg-white/80 transition hover:border-primary/40 hover:shadow-glow dark:bg-background/80">
+          <div className="space-y-5 px-6 pb-6">
             <div className="flex items-center justify-between">
-              <div className="h-12 w-12 rounded-xl bg-purple-100 dark:bg-purple-950 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Tags className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/20 text-primary transition group-hover:scale-105">
+                <Tags className="h-6 w-6" />
               </div>
               <Link
                 href="/categories"
-                className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 View
-                <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Categories
               </p>
-              <p className="text-3xl font-bold mt-1">{categoriesCount}</p>
+              <p className="mt-2 text-3xl font-semibold">{categoriesCount}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Organise spend for clarity
+              </p>
             </div>
           </div>
         </Card>
 
-        <Card className="group overflow-hidden border-0 shadow-md hover:shadow-xl transition-all duration-300">
-          <div className="p-6 space-y-4">
+        <Card className="group border border-white/40 bg-white/80 transition hover:border-primary/40 hover:shadow-glow dark:bg-background/80">
+          <div className="space-y-5 px-6 pb-6">
             <div className="flex items-center justify-between">
-              <div className="h-12 w-12 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Receipt className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary transition group-hover:scale-105">
+                <Receipt className="h-6 w-6" />
               </div>
               <Link
                 href="/transactions"
-                className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
+                className="text-sm font-medium text-primary hover:underline"
               >
                 View
-                <ArrowRight className="h-3 w-3" />
               </Link>
             </div>
             <div>
-              <p className="text-sm font-medium text-muted-foreground">
+              <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
                 Transactions
               </p>
-              <p className="text-3xl font-bold mt-1">{transactionsCount}</p>
+              <p className="mt-2 text-3xl font-semibold">{transactionsCount}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Recorded over the last 30 days
+              </p>
             </div>
           </div>
         </Card>
       </div>
 
-      {/* Recent Transactions */}
-      <Card className="overflow-hidden border-0 shadow-md">
-        <div className="p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <Card className="border border-white/50 bg-white/85 dark:border-white/10 dark:bg-background/80">
+        <div className="space-y-6 p-6 sm:p-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-2xl font-bold">Recent Transactions</h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                Your latest financial activity
+              <h2 className="text-2xl font-semibold tracking-tight">
+                Recent transactions
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                A snapshot of your latest financial activity
               </p>
             </div>
-            <Link href="/transactions">
-              <Button variant="default" size="sm" className="w-full sm:w-auto">
-                View All <ArrowRight className="ml-2 h-4 w-4" />
+            <Link href="/transactions" className="sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto">
+                View all
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
 
           {serializedTransactions.length === 0 ? (
-            <div className="py-16 text-center">
-              <div className="mx-auto h-20 w-20 rounded-full bg-muted/50 flex items-center justify-center mb-4">
-                <Receipt className="h-10 w-10 text-muted-foreground" />
+            <div className="rounded-3xl border border-dashed border-muted/60 bg-muted/20 px-6 py-14 text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+                <Receipt className="h-8 w-8 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-semibold mb-2">
-                No transactions yet
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Start tracking your finances by adding your first transaction
+              <h3 className="text-lg font-semibold">No transactions yet</h3>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Start tracking by adding your first transaction
               </p>
-              <Link href="/transactions">
-                <Button>Add Transaction</Button>
-              </Link>
+              <div className="mt-6 flex justify-center">
+                <Link href="/transactions">
+                  <Button size="sm">Add transaction</Button>
+                </Link>
+              </div>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {serializedTransactions.map(
                 (txn: {
                   _id: string
@@ -288,24 +327,24 @@ export default async function DashboardPage() {
                 }) => (
                   <div
                     key={txn._id}
-                    className="flex items-center justify-between gap-4 rounded-xl border bg-muted/20 p-4 transition-all hover:bg-muted/40 hover:shadow-sm"
+                    className="group flex flex-col gap-4 rounded-2xl border border-white/40 bg-white/70 p-4 transition hover:border-primary/30 hover:shadow-glow dark:border-white/10 dark:bg-background/70 sm:flex-row sm:items-center sm:justify-between"
                   >
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                    <div className="flex flex-1 items-center gap-4">
                       <div
-                        className={`h-10 w-10 rounded-lg flex items-center justify-center shrink-0 ${
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${
                           txn.amountCents >= 0
-                            ? 'bg-emerald-100 dark:bg-emerald-950'
-                            : 'bg-rose-100 dark:bg-rose-950'
+                            ? 'bg-emerald-500/15 text-emerald-600'
+                            : 'bg-rose-500/15 text-rose-500'
                         }`}
                       >
                         {txn.amountCents >= 0 ? (
-                          <TrendingUp className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                          <TrendingUp className="h-5 w-5" />
                         ) : (
-                          <TrendingDown className="h-5 w-5 text-rose-600 dark:text-rose-400" />
+                          <TrendingDown className="h-5 w-5" />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0 space-y-1">
-                        <p className="font-semibold truncate">
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <p className="truncate text-sm font-medium">
                           {txn.payee || 'Transaction'}
                         </p>
                         <p className="text-xs text-muted-foreground">
@@ -318,10 +357,10 @@ export default async function DashboardPage() {
                       </div>
                     </div>
                     <p
-                      className={`text-lg font-bold shrink-0 ${
+                      className={`text-lg font-semibold sm:text-xl ${
                         txn.amountCents >= 0
-                          ? 'text-emerald-600 dark:text-emerald-400'
-                          : 'text-rose-600 dark:text-rose-400'
+                          ? 'text-emerald-600'
+                          : 'text-rose-500'
                       }`}
                     >
                       {txn.amountCents >= 0 ? '+' : ''}

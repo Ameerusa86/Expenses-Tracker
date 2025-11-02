@@ -8,7 +8,6 @@ import { toast } from 'sonner'
 import {
   Card,
   CardHeader,
-  CardTitle,
   CardDescription,
   CardContent,
   CardFooter,
@@ -74,26 +73,55 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md space-y-6">
-        <div className="space-y-2 text-center">
-          <h1 className="text-3xl font-bold tracking-tight">
-            Create an account
-          </h1>
-          <p className="text-muted-foreground">
-            Get started with your expense tracking journey
-          </p>
+      <div className="grid w-full max-w-5xl gap-6 rounded-[2.5rem] border border-white/50 bg-white/80 p-6 shadow-soft backdrop-blur-lg dark:border-white/10 dark:bg-background/80 sm:p-8 lg:grid-cols-[1fr_1.1fr] lg:p-12">
+        <div className="relative hidden overflow-hidden rounded-[2rem] border border-white/40 bg-gradient-to-br from-primary/90 via-primary/75 to-indigo-500 p-10 text-primary-foreground shadow-[0_40px_100px_-45px_rgba(58,16,149,0.7)] lg:flex lg:flex-col lg:justify-between">
+          <div className="absolute inset-x-10 top-8 h-44 rounded-full bg-white/10 blur-3xl" />
+          <div className="relative space-y-6">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em]">
+              Start smarter
+            </span>
+            <h2 className="text-3xl font-semibold tracking-tight">
+              Everything you need to get ahead of your finances.
+            </h2>
+            <ul className="space-y-3 text-sm text-white/75">
+              <li className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-white" /> Custom
+                categories and smart tags
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-white" /> Powerful
+                insights with live dashboards
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-white" /> Forecast
+                tools for confident planning
+              </li>
+            </ul>
+          </div>
+          <div className="relative mt-8 rounded-2xl border border-white/30 bg-white/10 p-5 text-sm text-white/80 backdrop-blur">
+            <p className="font-medium">
+              “Creating an account took minutes and immediately simplified our
+              monthly reporting.”
+            </p>
+            <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white/60">
+              — Daniel, Operations
+            </p>
+          </div>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Sign up</CardTitle>
-            <CardDescription>
-              Choose your preferred registration method
-            </CardDescription>
+        <Card className="h-full border border-white/60 bg-white/90 px-6 py-8 shadow-soft dark:border-white/10 dark:bg-background/85 sm:px-8">
+          <CardHeader className="space-y-4 border-none px-0">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-semibold tracking-tight">
+                Create your account
+              </h1>
+              <CardDescription className="text-sm text-muted-foreground">
+                Join ExpenseFlow and start tracking in under a minute
+              </CardDescription>
+            </div>
           </CardHeader>
 
-          <CardContent className="space-y-4">
-            {/* OAuth Providers */}
+          <CardContent className="space-y-6 px-0">
             <div className="grid gap-3">
               <Button
                 variant="outline"
@@ -116,35 +144,44 @@ export default function RegisterPage() {
             </div>
 
             <div className="relative">
-              <Separator />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
+              <Separator className="bg-muted" />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 px-3 py-1 text-xs text-muted-foreground shadow-sm dark:bg-background">
                 or sign up with email
               </span>
             </div>
 
-            {/* Email + Password Form */}
-            <form onSubmit={onEmailPassword} className="space-y-4">
+            <form onSubmit={onEmailPassword} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="name">Full name</Label>
+                <Label
+                  htmlFor="name"
+                  className="text-xs uppercase tracking-[0.25em] text-muted-foreground"
+                >
+                  Full name
+                </Label>
                 <div className="relative">
-                  <UserRound className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <UserRound className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="name"
                     name="name"
                     type="text"
                     autoComplete="name"
                     required
-                    placeholder="John Doe"
-                    className="pl-9"
+                    placeholder="Jordan Lee"
+                    className="pl-11"
                     disabled={pending}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label
+                  htmlFor="email"
+                  className="text-xs uppercase tracking-[0.25em] text-muted-foreground"
+                >
+                  Email
+                </Label>
                 <div className="relative">
-                  <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Mail className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="email"
                     name="email"
@@ -152,16 +189,21 @@ export default function RegisterPage() {
                     autoComplete="email"
                     required
                     placeholder="you@example.com"
-                    className="pl-9"
+                    className="pl-11"
                     disabled={pending}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label
+                  htmlFor="password"
+                  className="text-xs uppercase tracking-[0.25em] text-muted-foreground"
+                >
+                  Password
+                </Label>
                 <div className="relative">
-                  <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Lock className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="password"
                     name="password"
@@ -169,7 +211,7 @@ export default function RegisterPage() {
                     autoComplete="new-password"
                     required
                     placeholder="••••••••"
-                    className="pl-9"
+                    className="pl-11"
                     disabled={pending}
                     minLength={8}
                   />
@@ -192,29 +234,30 @@ export default function RegisterPage() {
             </form>
           </CardContent>
 
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-center text-sm text-muted-foreground">
-              Already have an account?{' '}
+          <CardFooter className="flex flex-col gap-4 border-none px-0 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between rounded-xl bg-muted/40 px-4 py-3 text-xs">
+              <span className="font-medium text-foreground">
+                Already registered?
+              </span>
               <Link
                 href="/login"
-                className="font-medium text-primary hover:underline"
+                className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
               >
                 Sign in
               </Link>
             </div>
+            <p className="text-center text-[11px] text-muted-foreground">
+              By creating an account, you agree to our{' '}
+              <Link href="/terms" className="underline">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link href="/privacy" className="underline">
+                Privacy Policy
+              </Link>
+            </p>
           </CardFooter>
         </Card>
-
-        <p className="text-center text-xs text-muted-foreground">
-          By creating an account, you agree to our{' '}
-          <Link href="/terms" className="hover:underline">
-            Terms of Service
-          </Link>{' '}
-          and{' '}
-          <Link href="/privacy" className="hover:underline">
-            Privacy Policy
-          </Link>
-        </p>
       </div>
     </div>
   )
