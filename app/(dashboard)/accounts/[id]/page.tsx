@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
-import { updateAccount, deleteAccount } from '@/app/actions/accounts'
+import { updateAccount } from '@/app/actions/accounts'
+import { DeleteAccountButton } from '@/components/accounts/delete-account-button'
 
 export default async function EditAccountPage({
   params,
@@ -36,12 +37,6 @@ export default async function EditAccountPage({
       currency: String(formData.get('currency') || 'USD'),
     }
     await updateAccount(id, input)
-    redirect('/accounts')
-  }
-
-  async function deleteAction() {
-    'use server'
-    await deleteAccount(id)
     redirect('/accounts')
   }
 
@@ -132,11 +127,9 @@ export default async function EditAccountPage({
           </div>
         </form>
 
-        <form action={deleteAction} className="mt-6">
-          <Button type="submit" variant="destructive">
-            Delete account
-          </Button>
-        </form>
+        <div className="mt-6">
+          <DeleteAccountButton accountId={id} />
+        </div>
       </Card>
     </div>
   )

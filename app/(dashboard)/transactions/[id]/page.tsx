@@ -4,12 +4,12 @@ import { Account } from '@/models/Account'
 import { Category } from '@/models/Category'
 import { getUserId } from '@/lib/auth'
 import Link from 'next/link'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { formatCurrency } from '@/utils/money'
 import { ArrowLeft } from 'lucide-react'
-import { deleteTransaction } from '@/app/actions/transactions'
+import { DeleteTransactionButton } from '@/components/transactions/delete-transaction-button'
 
 export default async function EditTransactionPage({
   params,
@@ -34,12 +34,6 @@ export default async function EditTransactionPage({
   const serializedCategories: BasicDoc[] = JSON.parse(
     JSON.stringify(categories),
   )
-
-  async function onDelete() {
-    'use server'
-    await deleteTransaction(id)
-    redirect('/transactions')
-  }
 
   return (
     <div className="min-h-screen">
@@ -135,11 +129,7 @@ export default async function EditTransactionPage({
                 </div>
 
                 <div className="flex items-center justify-end gap-2 pt-2">
-                  <form action={onDelete}>
-                    <Button variant="destructive" type="submit">
-                      Delete
-                    </Button>
-                  </form>
+                  <DeleteTransactionButton transactionId={id} />
                   <Link href="/transactions">
                     <Button variant="outline">Cancel</Button>
                   </Link>

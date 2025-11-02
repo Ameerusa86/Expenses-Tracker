@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
-import { updateCategory, deleteCategory } from '@/app/actions/categories'
+import { updateCategory } from '@/app/actions/categories'
 import { ArrowLeft } from 'lucide-react'
+import { DeleteCategoryButton } from '@/components/categories/delete-category-button'
 
 export default async function EditCategoryPage({
   params,
@@ -32,16 +33,9 @@ export default async function EditCategoryPage({
         | 'income'
         | 'expense'
         | 'transfer',
-      icon: String(formData.get('icon') || ''),
       color: String(formData.get('color') || ''),
     }
     await updateCategory(id, input)
-    redirect('/categories')
-  }
-
-  async function deleteAction() {
-    'use server'
-    await deleteCategory(id)
     redirect('/categories')
   }
 
@@ -110,21 +104,6 @@ export default async function EditCategoryPage({
                 </select>
               </div>
 
-              {/* Icon */}
-              <div className="space-y-2">
-                <Label htmlFor="icon">Icon (emoji)</Label>
-                <Input
-                  id="icon"
-                  name="icon"
-                  defaultValue={typed.icon || ''}
-                  placeholder="e.g. 🛒, 💰, 🏠"
-                  maxLength={2}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Use any emoji as an icon for this category
-                </p>
-              </div>
-
               {/* Color */}
               <div className="space-y-2">
                 <Label htmlFor="color">Color (optional)</Label>
@@ -165,11 +144,7 @@ export default async function EditCategoryPage({
                   Deleting this category will remove it permanently. This action
                   cannot be undone.
                 </p>
-                <form action={deleteAction}>
-                  <Button type="submit" variant="destructive" size="sm">
-                    Delete category
-                  </Button>
-                </form>
+                <DeleteCategoryButton categoryId={id} />
               </div>
             </div>
           </Card>
