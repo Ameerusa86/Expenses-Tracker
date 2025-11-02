@@ -11,6 +11,8 @@ body {
 :root {
   --navbar-height: 56px;
   --radius: 1.1rem;
+
+  /* Light theme tokens */
   --background: oklch(0.99 0.01 255);
   --foreground: oklch(0.16 0.03 256);
   --card: oklch(0.99 0.01 255);
@@ -30,11 +32,15 @@ body {
   --border: oklch(0.9 0.015 240);
   --input: oklch(0.9 0.015 240);
   --ring: oklch(0.65 0.19 262);
+
+  /* Charts */
   --chart-1: oklch(0.74 0.2 275);
   --chart-2: oklch(0.68 0.25 235);
   --chart-3: oklch(0.58 0.2 205);
   --chart-4: oklch(0.78 0.12 180);
   --chart-5: oklch(0.64 0.19 320);
+
+  /* Sidebar (light) */
   --sidebar: oklch(0.99 0.01 255);
   --sidebar-foreground: oklch(0.2 0.03 256);
   --sidebar-primary: oklch(0.67 0.23 267);
@@ -46,6 +52,7 @@ body {
 }
 
 .dark {
+  /* Dark theme tokens */
   --background: oklch(0.12 0.02 255);
   --foreground: oklch(0.95 0.02 250);
   --card: oklch(0.16 0.02 255);
@@ -65,11 +72,15 @@ body {
   --border: oklch(0.2 0.015 255);
   --input: oklch(0.2 0.015 255);
   --ring: oklch(0.72 0.24 267);
+
+  /* Charts (dark) */
   --chart-1: oklch(0.75 0.21 275);
   --chart-2: oklch(0.62 0.25 235);
   --chart-3: oklch(0.55 0.2 205);
   --chart-4: oklch(0.65 0.16 180);
   --chart-5: oklch(0.57 0.2 320);
+
+  /* Sidebar (dark) */
   --sidebar: oklch(0.14 0.015 255);
   --sidebar-foreground: oklch(0.95 0.02 250);
   --sidebar-primary: oklch(0.72 0.24 265);

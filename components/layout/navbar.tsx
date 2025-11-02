@@ -82,6 +82,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
             variant="ghost"
             size="icon"
             className="lg:hidden rounded-xl bg-white/90 text-foreground shadow-sm hover:bg-white dark:bg-white/10 dark:text-foreground dark:hover:bg-white/15"
+            aria-label="Search"
           >
             <Search className="h-5 w-5" />
           </Button>
@@ -90,6 +91,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
             variant="ghost"
             size="icon"
             className="relative rounded-xl bg-white/90 text-foreground shadow-sm hover:bg-white dark:bg-white/10 dark:text-foreground dark:hover:bg-white/15"
+            aria-label="Notifications"
           >
             <Bell className="h-5 w-5" />
             <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary shadow-[0_0_0_2px] shadow-background" />
