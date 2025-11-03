@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import Link from 'next/link'
 import { AddCategoryModal } from '@/components/categories/add-category-modal'
-import { Receipt, Wallet, ArrowLeft, Tags, ArrowRight } from 'lucide-react'
+import { Receipt, Wallet, Tags, ArrowRight } from 'lucide-react'
 
 export default async function CategoriesPage() {
   await dbConnect()
@@ -29,19 +29,6 @@ export default async function CategoriesPage() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Home</span>
-            </Link>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-foreground font-medium">Categories</span>
-          </nav>
-
           {/* Header Section */}
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
@@ -119,7 +106,7 @@ export default async function CategoriesPage() {
                           key={category._id}
                           className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                          <div className="absolute inset-0 bg-linear-to-br from-green-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <div className="relative p-5 sm:p-6 space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
@@ -174,7 +161,7 @@ export default async function CategoriesPage() {
                           key={category._id}
                           className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                          <div className="absolute inset-0 bg-linear-to-br from-red-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <div className="relative p-5 sm:p-6 space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">
@@ -231,7 +218,7 @@ export default async function CategoriesPage() {
                           key={category._id}
                           className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                          <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <div className="relative p-5 sm:p-6 space-y-3">
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-3">

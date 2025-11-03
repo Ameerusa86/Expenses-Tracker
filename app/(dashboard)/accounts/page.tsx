@@ -14,7 +14,6 @@ import {
   ArrowRight,
   Receipt,
   Tags,
-  ArrowLeft,
 } from 'lucide-react'
 
 const accountIcons = {
@@ -36,19 +35,6 @@ export default async function AccountsPage() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Home</span>
-            </Link>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-foreground font-medium">Accounts</span>
-          </nav>
-
           {/* Header Section */}
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
@@ -123,7 +109,7 @@ export default async function AccountsPage() {
                       className="group relative overflow-hidden transition-all duration-300 hover:shadow-elevated"
                     >
                       {/* Gradient Background */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
                       <div className="relative p-5 sm:p-6 space-y-4">
                         {/* Header */}

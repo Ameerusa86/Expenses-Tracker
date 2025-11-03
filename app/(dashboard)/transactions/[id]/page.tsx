@@ -8,7 +8,6 @@ import { notFound } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { formatCurrency } from '@/utils/money'
-import { ArrowLeft } from 'lucide-react'
 import { DeleteTransactionButton } from '@/components/transactions/delete-transaction-button'
 
 export default async function EditTransactionPage({
@@ -39,19 +38,6 @@ export default async function EditTransactionPage({
     <div className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/transactions"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Transactions</span>
-            </Link>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-foreground font-medium">Edit</span>
-          </nav>
-
           <div className="space-y-6">
             <div className="space-y-2">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">

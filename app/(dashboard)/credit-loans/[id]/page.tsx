@@ -2,10 +2,9 @@ import { dbConnect } from '@/lib/db'
 import { getUserId } from '@/lib/auth'
 import { Liability } from '@/models/Liability'
 import { LiabilityPayment } from '@/models/LiabilityPayment'
-import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { AddCreditLoanPaymentModal } from '@/components/credit-loans/add-payment-modal'
-import { ArrowLeft, CreditCard, Landmark, CalendarDays } from 'lucide-react'
+import { CreditCard, Landmark, CalendarDays } from 'lucide-react'
 import { formatCurrency } from '@/utils/money'
 import { Types } from 'mongoose'
 
@@ -56,16 +55,6 @@ export default async function CreditLoanDetailPage({
     <div className="min-h-screen">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/credit-loans"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Back to Credit & Loans</span>
-            </Link>
-          </nav>
-
           <Card className="p-6 sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3">

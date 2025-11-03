@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { updateCategory } from '@/app/actions/categories'
-import { ArrowLeft } from 'lucide-react'
 import { DeleteCategoryButton } from '@/components/categories/delete-category-button'
 
 export default async function EditCategoryPage({
@@ -51,19 +50,6 @@ export default async function EditCategoryPage({
     <div className="min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/categories"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Categories</span>
-            </Link>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-foreground font-medium">Edit Category</span>
-          </nav>
-
           {/* Header Section */}
           <div className="space-y-3">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">

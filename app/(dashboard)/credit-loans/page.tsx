@@ -5,13 +5,7 @@ import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { AddCreditLoanModal } from '@/components/credit-loans/add-credit-loan-modal'
-import {
-  ArrowLeft,
-  Building2,
-  CreditCard,
-  Landmark,
-  ArrowRight,
-} from 'lucide-react'
+import { Building2, CreditCard, Landmark, ArrowRight } from 'lucide-react'
 import { formatCurrency } from '@/utils/money'
 
 export default async function CreditLoansPage() {
@@ -31,18 +25,6 @@ export default async function CreditLoansPage() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Home</span>
-            </Link>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-foreground font-medium">Credit & Loans</span>
-          </nav>
-
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
             <div className="space-y-3">
               <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">
@@ -90,7 +72,7 @@ export default async function CreditLoansPage() {
                     key={l._id}
                     className="group relative overflow-hidden transition-all duration-300 hover:shadow-elevated"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                     <div className="relative p-5 sm:p-6 space-y-4">
                       <div className="flex items-start gap-3">
                         <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">

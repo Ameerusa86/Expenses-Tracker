@@ -9,7 +9,7 @@ import { AddTransactionModal } from '@/components/transactions/add-transaction-m
 import Link from 'next/link'
 import { formatCurrency } from '@/utils/money'
 import { AddAccountModal } from '@/components/accounts/add-account-modal'
-import { Wallet, Tags, ArrowLeft, Receipt } from 'lucide-react'
+import { Wallet, Tags, Receipt } from 'lucide-react'
 
 interface SerializedTransaction {
   _id: string
@@ -63,19 +63,6 @@ export default async function TransactionsPage() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10">
         <div className="space-y-8 animate-in fade-in duration-500">
-          {/* Breadcrumb Navigation */}
-          <nav className="flex items-center gap-2 text-sm">
-            <Link
-              href="/"
-              className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Home</span>
-            </Link>
-            <span className="text-muted-foreground/40">/</span>
-            <span className="text-foreground font-medium">Transactions</span>
-          </nav>
-
           {/* Header Section */}
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
