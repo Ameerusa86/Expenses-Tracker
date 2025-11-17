@@ -23,10 +23,24 @@ export async function GET() {
     const now = new Date()
     const horizonMs = 14 * 86400000
 
-    const upcoming = liabilities
+    type LeanLiability = {
+      _id: unknown
+      name: string
+      type: string
+      balanceCents: number
+      minPaymentCents?: number
+      dueDay?: number
+      nextDueDate?: Date
+    }
+
+    const upcoming = (liabilities as unknown as LeanLiability[])
       .map((l) => ({
-        ...l,
-        dueDate: nextDueDate(l),
+        id: String(l._id),
+        name: l.name,
+        type: l.type,
+        balanceCents: l.balanceCents,
+        minPaymentCents: l.minPaymentCents ?? 0,
+        dueDate: nextDueDate({ dueDay: l.dueDay, nextDueDate: l.nextDueDate }),
       }))
       .filter(
         (l) =>
@@ -37,19 +51,17 @@ export async function GET() {
         (a, b) => (a.dueDate as Date).getTime() - (b.dueDate as Date).getTime(),
       )
       .map((l) => ({
-        id: String(l._id),
+        id: l.id,
         name: l.name,
         type: l.type,
         balanceCents: l.balanceCents,
-        minPaymentCents: l.minPaymentCents ?? 0,
+        minPaymentCents: l.minPaymentCents,
         dueDate: l.dueDate,
       }))
 
     return NextResponse.json({ upcoming })
-  } catch (e: any) {
-    return NextResponse.json(
-      { error: e?.message || 'Failed to load reminders' },
-      { status: 500 },
-    )
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Failed to load reminders'
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }
