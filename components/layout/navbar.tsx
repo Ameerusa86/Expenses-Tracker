@@ -35,7 +35,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
   const initial = (user?.name ?? user?.email ?? 'U').charAt(0).toUpperCase()
   return (
     <header className="sticky top-0 z-40 mx-auto w-full max-w-[1500px] px-4 pt-4 sm:px-6 lg:px-10">
-      <div className="flex h-16 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-surface/90 px-3 shadow-soft backdrop-blur-lg supports-[backdrop-filter]:bg-surface/85 dark:border-border/60 dark:bg-surface/65 sm:px-5">
+      <div className="flex h-16 items-center justify-between gap-3 rounded-2xl border border-border/60 bg-surface/90 px-3 shadow-soft backdrop-blur-lg supports-backdrop-filter:bg-surface/85 dark:border-border/60 dark:bg-surface/65 sm:px-5">
         <div className="flex flex-1 items-center gap-3">
           <Sheet>
             <SheetTrigger asChild>
@@ -57,10 +57,19 @@ export function Navbar({ user }: { user: UserLite | null }) {
           </Sheet>
 
           <Link href="/" className="flex items-center gap-2.5 md:hidden">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-glow">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/75 text-primary-foreground shadow-glow">
               <TrendingUp className="h-5 w-5" />
             </div>
             <span className="text-lg font-semibold tracking-tight">
+              ExpenseFlow
+            </span>
+          </Link>
+
+          <Link href="/" className="hidden items-center gap-2.5 md:flex">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary/75 text-primary-foreground shadow-glow">
+              <TrendingUp className="h-5 w-5" />
+            </div>
+            <span className="text-base font-semibold tracking-tight">
               ExpenseFlow
             </span>
           </Link>
@@ -106,7 +115,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
                       src={user.image ?? undefined}
                       alt={user.name ?? 'User'}
                     />
-                    <AvatarFallback className="bg-gradient-to-br from-primary to-primary/75 text-primary-foreground font-semibold">
+                    <AvatarFallback className="bg-linear-to-br from-primary to-primary/75 text-primary-foreground font-semibold">
                       {initial}
                     </AvatarFallback>
                   </Avatar>
@@ -123,7 +132,7 @@ export function Navbar({ user }: { user: UserLite | null }) {
                         src={user.image ?? undefined}
                         alt={user.name ?? 'User'}
                       />
-                      <AvatarFallback className="bg-gradient-to-br from-primary to-primary/75 text-primary-foreground font-semibold">
+                      <AvatarFallback className="bg-linear-to-br from-primary to-primary/75 text-primary-foreground font-semibold">
                         {initial}
                       </AvatarFallback>
                     </Avatar>

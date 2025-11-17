@@ -14,10 +14,11 @@ import {
 import { cn } from '@/lib/utils'
 
 const links = [
-  { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+  { name: 'Dashboard', icon: LayoutDashboard, href: '/' },
   { name: 'Transactions', icon: Receipt, href: '/transactions' },
   { name: 'Accounts', icon: Wallet, href: '/accounts' },
   { name: 'Credit & Loans', icon: Wallet, href: '/credit-loans' },
+  { name: 'Planner', icon: TrendingUp, href: '/planner' },
   { name: 'Categories', icon: Tags, href: '/categories' },
   { name: 'Reports', icon: FileText, href: '/reports' },
   { name: 'Settings', icon: Settings, href: '/settings' },
@@ -31,7 +32,7 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
   const pathname = usePathname()
 
   const isActive = (href: string) => {
-    if (href === '/dashboard') {
+    if (href === '/' || href === '/dashboard') {
       return pathname === '/' || pathname === '/dashboard'
     }
     return pathname.startsWith(href)
@@ -48,8 +49,11 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
   return (
     <aside className={containerClasses}>
       <div className={contentClasses}>
-        <div className="flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/90 px-5 py-4 shadow-soft backdrop-blur-lg dark:border-border/60 dark:bg-surface/65">
-          <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-glow">
+        <Link
+          href="/"
+          className="flex items-center gap-3 rounded-2xl border border-border/60 bg-surface/90 px-5 py-4 shadow-soft backdrop-blur-lg transition hover:border-primary/40 dark:border-border/60 dark:bg-surface/65"
+        >
+          <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-primary to-primary/75 text-primary-foreground shadow-glow">
             <TrendingUp className="h-6 w-6" />
             <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-emerald-400 shadow-[0_0_0_3px_rgba(255,255,255,0.85)] dark:shadow-[0_0_0_3px_rgba(15,23,42,0.85)]" />
           </div>
@@ -61,7 +65,7 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
               Command your cashflow
             </p>
           </div>
-        </div>
+        </Link>
 
         <nav className="mt-6 flex-1 overflow-y-auto">
           <div className="flex flex-col gap-1.5">
@@ -74,7 +78,7 @@ export function Sidebar({ isMobile = false }: SidebarProps) {
                   className={cn(
                     'group relative flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200',
                     active
-                      ? 'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-glow'
+                      ? 'bg-linear-to-r from-primary to-primary/80 text-primary-foreground shadow-glow'
                       : 'text-muted-foreground hover:bg-surface/75 hover:text-foreground dark:hover:bg-surface/60',
                   )}
                 >

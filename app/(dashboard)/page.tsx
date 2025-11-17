@@ -6,7 +6,10 @@ import { Transaction } from '@/models/Transaction'
 import { Account } from '@/models/Account'
 import { Category } from '@/models/Category'
 import { Card } from '@/components/ui/card'
+import { Liability } from '@/models/Liability'
 import { Button } from '@/components/ui/button'
+import { RecurringIncome } from '@/models/RecurringIncome'
+import { biWeeklyOccurrences } from '@/lib/recurrence'
 import Link from 'next/link'
 import { formatCurrency } from '@/utils/money'
 import {
@@ -84,10 +87,62 @@ export default async function DashboardPage() {
 
   const serializedTransactions = JSON.parse(JSON.stringify(recentTransactions))
 
+  // Upcoming payments (next 14 days)
+  const now = new Date()
+  const horizonMs = 14 * 86400000
+  const rawLiabilities = await Liability.find({ userId, status: 'open' }).lean()
+  function computeNextDue(l: { dueDay?: number; nextDueDate?: Date }) {
+    if (l.nextDueDate) return l.nextDueDate
+    if (l.dueDay) {
+      const d = new Date(now.getFullYear(), now.getMonth(), l.dueDay)
+      if (d < now) d.setMonth(d.getMonth() + 1)
+      return d
+    }
+    return undefined
+  }
+  const upcoming = rawLiabilities
+    .map((l: any) => ({
+      id: String(l._id),
+      name: l.name as string,
+      minPaymentCents: (l.minPaymentCents ?? 0) as number,
+      dueDate: computeNextDue(l as { dueDay?: number; nextDueDate?: Date }),
+    }))
+    .filter(
+      (l) =>
+        l.dueDate && (l.dueDate as Date).getTime() - now.getTime() <= horizonMs,
+    )
+    .sort(
+      (a, b) => (a.dueDate as Date).getTime() - (b.dueDate as Date).getTime(),
+    )
+    .slice(0, 5)
+
+  // Next paychecks (bi-weekly) — show next 3 aggregated by date
+  const incomes = await RecurringIncome.find({ userId }).lean()
+  const nowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+  const pays = incomes.flatMap((inc: any) => {
+    if (inc.frequency !== 'bi-weekly')
+      return [] as { date: Date; amountCents: number }[]
+    const occ = biWeeklyOccurrences(new Date(inc.startDate), 6, nowStart)
+    return occ.map((d) => ({ date: d, amountCents: inc.amountCents as number }))
+  })
+  const grouped = new Map<string, number>()
+  for (const p of pays) {
+    const key = new Date(
+      p.date.getFullYear(),
+      p.date.getMonth(),
+      p.date.getDate(),
+    ).toISOString()
+    grouped.set(key, (grouped.get(key) || 0) + p.amountCents)
+  }
+  const nextPays = [...grouped.entries()]
+    .map(([k, v]) => ({ date: new Date(k), amountCents: v }))
+    .sort((a, b) => a.date.getTime() - b.date.getTime())
+    .slice(0, 3)
+
   return (
     <div className="space-y-8 sm:space-y-10">
       <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        <div className="relative overflow-hidden rounded-3xl border border-primary/35 bg-gradient-to-br from-primary via-primary/92 to-primary/75 p-8 text-primary-foreground shadow-[0_30px_90px_-40px_rgba(58,16,149,0.6)]">
+        <div className="relative overflow-hidden rounded-3xl border border-primary/35 bg-linear-to-br from-primary via-primary/92 to-primary/75 p-8 text-primary-foreground shadow-[0_30px_90px_-40px_rgba(58,16,149,0.6)]">
           <div className="absolute inset-y-0 right-0 hidden w-1/2 rounded-l-[5rem] bg-primary-foreground/15 blur-3xl lg:block" />
           <div className="relative flex h-full flex-col justify-between gap-8">
             <div className="space-y-3">
@@ -133,7 +188,7 @@ export default async function DashboardPage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-600 text-white shadow-[0_35px_70px_-40px_rgba(16,185,129,0.65)]">
+          <Card className="relative overflow-hidden border-0 bg-linear-to-br from-emerald-400 via-emerald-500 to-emerald-600 text-white shadow-[0_35px_70px_-40px_rgba(16,185,129,0.65)]">
             <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/3 -translate-y-1/2 rounded-full bg-primary-foreground/25 blur-3xl" />
             <div className="relative space-y-4 p-6">
               <div className="flex items-center gap-3">
@@ -159,7 +214,7 @@ export default async function DashboardPage() {
             </div>
           </Card>
 
-          <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-rose-400 via-rose-500 to-rose-600 text-white shadow-[0_35px_70px_-40px_rgba(244,63,94,0.6)]">
+          <Card className="relative overflow-hidden border-0 bg-linear-to-br from-rose-400 via-rose-500 to-rose-600 text-white shadow-[0_35px_70px_-40px_rgba(244,63,94,0.6)]">
             <div className="absolute right-0 top-0 h-28 w-28 translate-x-1/3 -translate-y-1/3 rounded-full bg-primary-foreground/25 blur-3xl" />
             <div className="relative space-y-4 p-6">
               <div className="flex items-center gap-3">
@@ -182,8 +237,8 @@ export default async function DashboardPage() {
           <Card
             className={`relative overflow-hidden border-0 text-white shadow-[0_35px_70px_-40px_rgba(79,70,229,0.55)] ${
               netIncome >= 0
-                ? 'bg-gradient-to-br from-indigo-500 via-indigo-600 to-indigo-700'
-                : 'bg-gradient-to-br from-orange-400 via-orange-500 to-amber-500'
+                ? 'bg-linear-to-br from-indigo-500 via-indigo-600 to-indigo-700'
+                : 'bg-linear-to-br from-orange-400 via-orange-500 to-amber-500'
             }`}
           >
             <div className="absolute right-0 top-0 h-28 w-28 translate-x-1/3 -translate-y-1/3 rounded-full bg-primary-foreground/25 blur-3xl" />
@@ -288,6 +343,80 @@ export default async function DashboardPage() {
 
       <Card className="border border-border/60 bg-surface/95 dark:border-border/60 dark:bg-surface/65">
         <div className="space-y-6 p-6 sm:p-8">
+          {/* Next Paychecks */}
+          <div className="rounded-2xl border border-muted/50 bg-muted/20 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-sm font-semibold">Next paychecks</h3>
+              <Link
+                href="/planner"
+                className="text-xs text-primary hover:underline"
+              >
+                Plan
+              </Link>
+            </div>
+            {nextPays.length === 0 ? (
+              <p className="text-xs text-muted-foreground">
+                No upcoming paychecks configured.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {nextPays.map((p, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between rounded-xl bg-surface/70 px-3 py-2 text-sm"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">
+                        {p.date.toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="text-sm font-semibold">
+                      {formatCurrency(p.amountCents)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Upcoming Payments Widget */}
+          <div className="rounded-2xl border border-muted/50 bg-muted/20 p-4">
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-sm font-semibold">
+                Upcoming payments (14 days)
+              </h3>
+              <Link
+                href="/credit-loans"
+                className="text-xs text-primary hover:underline"
+              >
+                Manage
+              </Link>
+            </div>
+            {upcoming.length === 0 ? (
+              <p className="text-xs text-muted-foreground">
+                No payments due soon.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {upcoming.map((u) => (
+                  <div
+                    key={u.id}
+                    className="flex items-center justify-between rounded-xl bg-surface/70 px-3 py-2 text-sm"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate font-medium">{u.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        Due {(u.dueDate as Date).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="text-sm font-semibold">
+                      {formatCurrency(u.minPaymentCents || 0)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-2xl font-semibold tracking-tight">

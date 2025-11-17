@@ -13,6 +13,7 @@ export interface LiabilityDoc {
   creditLimitCents?: number // credit cards only
   interestRateAPR?: number // e.g., 19.99
   minPaymentCents?: number
+  targetUtilizationPercent?: number // optional per-card goal, e.g., 30
   statementDay?: number // 1-28 (credit cards)
   dueDay?: number // 1-28 (credit cards)
   nextDueDate?: Date // explicit next due date (loans)
@@ -32,6 +33,7 @@ const LiabilitySchema = new Schema<LiabilityDoc>(
     creditLimitCents: { type: Number },
     interestRateAPR: { type: Number },
     minPaymentCents: { type: Number },
+    targetUtilizationPercent: { type: Number, min: 0, max: 100 },
     statementDay: { type: Number, min: 1, max: 28 },
     dueDay: { type: Number, min: 1, max: 28 },
     nextDueDate: { type: Date },

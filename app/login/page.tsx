@@ -72,7 +72,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
       <div className="grid w-full max-w-5xl gap-6 rounded-[2.5rem] border border-border/60 bg-surface/95 p-6 shadow-elevated backdrop-blur-2xl dark:border-border/60 dark:bg-surface/70 sm:p-8 lg:grid-cols-[1.1fr_1fr] lg:p-12">
-        <div className="relative hidden overflow-hidden rounded-[2rem] border border-primary/35 bg-gradient-to-br from-primary via-primary/85 to-primary/65 p-10 text-primary-foreground shadow-[0_40px_100px_-45px_rgba(58,16,149,0.7)] lg:flex lg:flex-col lg:justify-between">
+        <div className="relative hidden overflow-hidden rounded-4xl border border-primary/35 bg-linear-to-br from-primary via-primary/85 to-primary/65 p-10 text-primary-foreground shadow-[0_40px_100px_-45px_rgba(58,16,149,0.7)] lg:flex lg:flex-col lg:justify-between">
           <div className="absolute inset-x-8 top-8 h-40 rounded-full bg-primary-foreground/15 blur-3xl" />
           <div className="relative space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
