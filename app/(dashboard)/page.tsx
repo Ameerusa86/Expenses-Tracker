@@ -6,6 +6,7 @@ import { Transaction } from '@/models/Transaction'
 import { Account } from '@/models/Account'
 import { Category } from '@/models/Category'
 import { Card } from '@/components/ui/card'
+import { Donut } from '@/components/ui/donut'
 import { Liability } from '@/models/Liability'
 import { Button } from '@/components/ui/button'
 import { RecurringIncome } from '@/models/RecurringIncome'
@@ -20,6 +21,8 @@ import {
   Receipt,
   ArrowRight,
 } from 'lucide-react'
+import { Bars } from '@/components/ui/bars'
+import { Sparkline } from '@/components/ui/sparkline'
 
 export default async function DashboardPage() {
   const session = (await auth.api.getSession({
@@ -78,6 +81,29 @@ export default async function DashboardPage() {
   )
 
   const netIncome = monthlyIncome - monthlyExpenses
+
+  // Previous month window
+  const prevStart = new Date(startOfMonth)
+  prevStart.setMonth(prevStart.getMonth() - 1)
+  const prevMonthTxns = await Transaction.find({
+    userId,
+    date: { $gte: prevStart, $lt: startOfMonth },
+  }).lean()
+  const prevIncome = prevMonthTxns
+    .filter((t) => (t as unknown as { amountCents: number }).amountCents > 0)
+    .reduce(
+      (sum, t) => sum + (t as unknown as { amountCents: number }).amountCents,
+      0,
+    )
+  const prevExpenses = Math.abs(
+    prevMonthTxns
+      .filter((t) => (t as unknown as { amountCents: number }).amountCents < 0)
+      .reduce(
+        (sum, t) => sum + (t as unknown as { amountCents: number }).amountCents,
+        0,
+      ),
+  )
+  const prevNet = prevIncome - prevExpenses
 
   // Get recent transactions
   const recentTransactions = await Transaction.find({ userId })
@@ -139,136 +165,159 @@ export default async function DashboardPage() {
     .sort((a, b) => a.date.getTime() - b.date.getTime())
     .slice(0, 3)
 
+  // Credit cards summary
+  const creditCards = rawLiabilities.filter(
+    (l: any) => l.type === 'credit-card',
+  )
+  const ccBalance = creditCards.reduce(
+    (s: number, l: any) => s + (l.balanceCents || 0),
+    0,
+  )
+  const ccLimit = creditCards.reduce(
+    (s: number, l: any) => s + (l.creditLimitCents || 0),
+    0,
+  )
+  const ccUtil =
+    ccLimit > 0 ? Math.min(100, Math.round((ccBalance / ccLimit) * 100)) : 0
+
+  // Last 30 days series for mini charts
+  const windowStart = new Date(now)
+  windowStart.setDate(windowStart.getDate() - 29)
+  windowStart.setHours(0, 0, 0, 0)
+  const lastWindow = await Transaction.find({
+    userId,
+    date: { $gte: windowStart },
+  }).lean()
+  const dayKey = (d: Date) =>
+    new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString()
+  const daily = new Map<string, number>()
+  for (let i = 0; i < 30; i++) {
+    const d = new Date(windowStart)
+    d.setDate(d.getDate() + i)
+    daily.set(dayKey(d), 0)
+  }
+  for (const t of lastWindow) {
+    const v = (t as unknown as { amountCents: number }).amountCents
+    const k = dayKey((t as any).date as Date)
+    daily.set(k, (daily.get(k) || 0) + v)
+  }
+  const last7Keys = Array.from(daily.keys()).slice(-7)
+  const last7 = last7Keys.map((k) => daily.get(k) || 0)
+  const last30Cumulative = Array.from(daily.values()).reduce<number[]>(
+    (acc, v) => {
+      const prev = acc.length ? acc[acc.length - 1] : 0
+      acc.push(prev + v)
+      return acc
+    },
+    [],
+  )
+
   return (
     <div className="space-y-8 sm:space-y-10">
-      <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
-        <div className="relative overflow-hidden rounded-3xl border border-primary/35 bg-linear-to-br from-primary via-primary/92 to-primary/75 p-8 text-primary-foreground shadow-[0_30px_90px_-40px_rgba(58,16,149,0.6)]">
-          <div className="absolute inset-y-0 right-0 hidden w-1/2 rounded-l-[5rem] bg-primary-foreground/15 blur-3xl lg:block" />
-          <div className="relative flex h-full flex-col justify-between gap-8">
-            <div className="space-y-3">
-              <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
-                Financial overview
-              </span>
-              <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
-                Welcome back, {name}
-              </h1>
-              <p className="max-w-xl text-sm text-primary-foreground/80 sm:text-base">
-                Stay ahead of your spending with real-time tracking, category
-                insights, and guided budgets built to scale with you.
+      {/* Top summary row */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <div className="flex items-center justify-between px-6 pb-6">
+            <div>
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                Summary
               </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-primary-foreground/20 bg-primary/25 p-4 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.2em] text-primary-foreground/75">
-                  This month&apos;s income
-                </p>
-                <p className="mt-3 text-3xl font-semibold text-primary-foreground">
-                  {formatCurrency(monthlyIncome)}
-                </p>
-                <p className="mt-1 text-xs text-primary-foreground/70">
-                  {new Date().toLocaleDateString('en-US', {
-                    month: 'long',
-                    year: 'numeric',
-                  })}
-                </p>
-              </div>
-              <div className="rounded-2xl border border-primary-foreground/20 bg-primary/20 p-4 backdrop-blur">
-                <p className="text-xs uppercase tracking-[0.2em] text-primary-foreground/75">
-                  Active accounts
-                </p>
-                <p className="mt-3 text-3xl font-semibold text-primary-foreground">
-                  {accountsCount}
-                </p>
-                <p className="mt-1 text-xs text-primary-foreground/70">
-                  connected sources
-                </p>
+              <div className="mt-2 space-y-1">
+                <div className="flex items-center justify-between gap-6">
+                  <span className="text-sm text-muted-foreground">
+                    Balance:
+                  </span>
+                  <span
+                    className={`text-sm font-semibold ${netIncome >= 0 ? 'text-emerald-600' : 'text-rose-600'}`}
+                  >
+                    {formatCurrency(netIncome)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-6">
+                  <span className="text-sm text-muted-foreground">Income:</span>
+                  <span className="text-sm font-medium">
+                    {formatCurrency(monthlyIncome)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-6">
+                  <span className="text-sm text-muted-foreground">
+                    Expenses:
+                  </span>
+                  <span className="text-sm font-medium">
+                    -{formatCurrency(monthlyExpenses)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-6">
+                  <span className="text-sm text-muted-foreground">
+                    Credit cards:
+                  </span>
+                  <span className="text-sm font-medium text-rose-600">
+                    -{formatCurrency(ccBalance)}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </Card>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          <Card className="relative overflow-hidden border-0 bg-linear-to-br from-emerald-400 via-emerald-500 to-emerald-600 text-white shadow-[0_35px_70px_-40px_rgba(16,185,129,0.65)]">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-1/3 -translate-y-1/2 rounded-full bg-primary-foreground/25 blur-3xl" />
-            <div className="relative space-y-4 p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/20">
-                  <TrendingUp className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/70">
-                    Income
-                  </p>
-                  <p className="text-lg font-semibold">
-                    {formatCurrency(monthlyIncome)}
-                  </p>
-                </div>
-              </div>
-              <p className="text-xs text-white/70">
-                Updated{' '}
-                {new Date().toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                })}
+        <Card>
+          <div className="flex items-center gap-4 px-6 pb-6">
+            <Donut
+              value={
+                monthlyIncome + monthlyExpenses === 0
+                  ? 0
+                  : (monthlyIncome / (monthlyIncome + monthlyExpenses)) * 100
+              }
+              size={72}
+              stroke={10}
+              valueColor="#22c55e"
+              trackColor="#ef4444"
+            />
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                This month
+              </p>
+              <p className="text-sm font-semibold">
+                {formatCurrency(monthlyIncome - monthlyExpenses)}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {new Date().toLocaleDateString('en-US', { month: 'long' })}
               </p>
             </div>
-          </Card>
+          </div>
+        </Card>
 
-          <Card className="relative overflow-hidden border-0 bg-linear-to-br from-rose-400 via-rose-500 to-rose-600 text-white shadow-[0_35px_70px_-40px_rgba(244,63,94,0.6)]">
-            <div className="absolute right-0 top-0 h-28 w-28 translate-x-1/3 -translate-y-1/3 rounded-full bg-primary-foreground/25 blur-3xl" />
-            <div className="relative space-y-4 p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/20">
-                  <TrendingDown className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/70">
-                    Expenses
-                  </p>
-                  <p className="text-lg font-semibold">
-                    {formatCurrency(monthlyExpenses)}
-                  </p>
-                </div>
-              </div>
-              <p className="text-xs text-white/70">Across all categories</p>
-            </div>
-          </Card>
-
-          <Card
-            className={`relative overflow-hidden border-0 text-white shadow-[0_35px_70px_-40px_rgba(79,70,229,0.55)] ${
-              netIncome >= 0
-                ? 'bg-linear-to-br from-indigo-500 via-indigo-600 to-indigo-700'
-                : 'bg-linear-to-br from-orange-400 via-orange-500 to-amber-500'
-            }`}
-          >
-            <div className="absolute right-0 top-0 h-28 w-28 translate-x-1/3 -translate-y-1/3 rounded-full bg-primary-foreground/25 blur-3xl" />
-            <div className="relative space-y-4 p-6">
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-foreground/20">
-                  <Wallet className="h-6 w-6 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.25em] text-white/70">
-                    Net balance
-                  </p>
-                  <p className="text-lg font-semibold">
-                    {formatCurrency(netIncome)}
-                  </p>
-                </div>
-              </div>
-              <p className="text-xs text-white/70">
-                Difference between income and expenses
+        <Card>
+          <div className="flex items-center gap-4 px-6 pb-6">
+            <Donut
+              value={
+                prevIncome + prevExpenses === 0
+                  ? 0
+                  : (prevIncome / (prevIncome + prevExpenses)) * 100
+              }
+              size={72}
+              stroke={10}
+              valueColor="#22c55e"
+              trackColor="#ef4444"
+            />
+            <div className="space-y-1">
+              <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                Last month
+              </p>
+              <p className="text-sm font-semibold">{formatCurrency(prevNet)}</p>
+              <p className="text-xs text-muted-foreground">
+                {prevStart.toLocaleDateString('en-US', { month: 'long' })}
               </p>
             </div>
-          </Card>
-        </div>
+          </div>
+        </Card>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Card className="group bg-surface/95 transition hover:border-primary/40 hover:shadow-glow dark:bg-surface/65">
+        <Card className="group transition">
           <div className="space-y-5 px-6 pb-6">
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary transition group-hover:scale-105">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-primary/10 text-primary">
                 <Wallet className="h-6 w-6" />
               </div>
               <Link
@@ -290,10 +339,10 @@ export default async function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="group bg-surface/95 transition hover:border-primary/40 hover:shadow-glow dark:bg-surface/65">
+        <Card className="group transition">
           <div className="space-y-5 px-6 pb-6">
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/20 text-primary transition group-hover:scale-105">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-accent/20 text-primary">
                 <Tags className="h-6 w-6" />
               </div>
               <Link
@@ -315,10 +364,10 @@ export default async function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="group bg-surface/95 transition hover:border-primary/40 hover:shadow-glow dark:bg-surface/65">
+        <Card className="group transition">
           <div className="space-y-5 px-6 pb-6">
             <div className="flex items-center justify-between">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary text-primary transition group-hover:scale-105">
+              <div className="flex h-12 w-12 items-center justify-center rounded-md bg-secondary text-primary">
                 <Receipt className="h-6 w-6" />
               </div>
               <Link
@@ -341,10 +390,55 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <Card className="border border-border/60 bg-surface/95 dark:border-border/60 dark:bg-surface/65">
+      {/* Credit cards and charts */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card>
+          <div className="space-y-4 px-6 pb-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">Credit cards</p>
+              {ccLimit > 0 ? (
+                <span className="text-xs text-muted-foreground">
+                  {ccUtil}% used
+                </span>
+              ) : null}
+            </div>
+            <div className="text-sm text-rose-600 font-semibold">
+              -{formatCurrency(ccBalance)}
+            </div>
+            <div className="h-2 w-full rounded bg-muted">
+              <div
+                className="h-full rounded bg-emerald-500"
+                style={{ width: `${ccLimit > 0 ? ccUtil : 0}%` }}
+              />
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <div className="space-y-4 px-6 pb-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">Last 7 days</p>
+            </div>
+            <Bars values={last7.map((v) => v / 100)} width={220} height={70} />
+          </div>
+        </Card>
+        <Card>
+          <div className="space-y-4 px-6 pb-6">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-semibold">Balance</p>
+            </div>
+            <Sparkline
+              points={last30Cumulative.map((v) => v / 100)}
+              width={220}
+              height={70}
+            />
+          </div>
+        </Card>
+      </div>
+
+      <Card>
         <div className="space-y-6 p-6 sm:p-8">
           {/* Next Paychecks */}
-          <div className="rounded-2xl border border-muted/50 bg-muted/20 p-4">
+          <div className="rounded-lg border bg-muted/20 p-4">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-sm font-semibold">Next paychecks</h3>
               <Link
@@ -380,7 +474,7 @@ export default async function DashboardPage() {
           </div>
 
           {/* Upcoming Payments Widget */}
-          <div className="rounded-2xl border border-muted/50 bg-muted/20 p-4">
+          <div className="rounded-lg border bg-muted/20 p-4">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-sm font-semibold">
                 Upcoming payments (14 days)
@@ -435,8 +529,8 @@ export default async function DashboardPage() {
           </div>
 
           {serializedTransactions.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-muted/60 bg-muted/20 px-6 py-14 text-center">
-              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+            <div className="rounded-xl border border-dashed border-muted/60 bg-muted/20 px-6 py-14 text-center">
+              <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-md bg-muted">
                 <Receipt className="h-8 w-8 text-muted-foreground" />
               </div>
               <h3 className="text-lg font-semibold">No transactions yet</h3>
@@ -460,11 +554,11 @@ export default async function DashboardPage() {
                 }) => (
                   <div
                     key={txn._id}
-                    className="group flex flex-col gap-4 rounded-2xl border border-border/60 bg-surface/90 p-4 transition hover:border-primary/30 hover:shadow-glow dark:border-border/60 dark:bg-surface/60 sm:flex-row sm:items-center sm:justify-between"
+                    className="group flex flex-col gap-4 rounded-xl border bg-background p-4 transition sm:flex-row sm:items-center sm:justify-between"
                   >
                     <div className="flex flex-1 items-center gap-4">
                       <div
-                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-md ${
                           txn.amountCents >= 0
                             ? 'bg-emerald-500/15 text-emerald-600'
                             : 'bg-rose-500/15 text-rose-500'

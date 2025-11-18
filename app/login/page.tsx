@@ -71,8 +71,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
-      <div className="grid w-full max-w-5xl gap-6 rounded-[2.5rem] border border-border/60 bg-surface/95 p-6 shadow-elevated backdrop-blur-2xl dark:border-border/60 dark:bg-surface/70 sm:p-8 lg:grid-cols-[1.1fr_1fr] lg:p-12">
-        <div className="relative hidden overflow-hidden rounded-4xl border border-primary/35 bg-linear-to-br from-primary via-primary/85 to-primary/65 p-10 text-primary-foreground shadow-[0_40px_100px_-45px_rgba(58,16,149,0.7)] lg:flex lg:flex-col lg:justify-between">
+      <div className="grid w-full max-w-5xl gap-6 rounded-xl border bg-background p-6 sm:p-8 lg:grid-cols-[1.1fr_1fr] lg:p-12">
+        <div className="relative hidden overflow-hidden rounded-xl border bg-muted p-10 text-foreground lg:flex lg:flex-col lg:justify-between">
           <div className="absolute inset-x-8 top-8 h-40 rounded-full bg-primary-foreground/15 blur-3xl" />
           <div className="relative space-y-6">
             <span className="inline-flex items-center gap-2 rounded-full border border-primary-foreground/25 bg-primary-foreground/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground/80">
@@ -86,7 +86,7 @@ export default function LoginPage() {
               forecasts that keep you in control.
             </p>
           </div>
-          <div className="relative mt-8 rounded-2xl border border-primary-foreground/25 bg-primary-foreground/15 p-5 text-sm text-primary-foreground/80 backdrop-blur">
+          <div className="relative mt-8 rounded-lg border bg-muted/30 p-5 text-sm text-muted-foreground">
             <p className="font-medium">
               “ExpenseFlow has transformed the way I manage cashflow across all
               of my accounts.”
@@ -97,7 +97,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <Card className="h-full border border-border/60 bg-surface/95 px-6 py-8 shadow-soft dark:border-border/60 dark:bg-surface/70 sm:px-8">
+        <Card className="h-full px-6 py-8 sm:px-8">
           <CardHeader className="space-y-4 border-none px-0">
             <div className="space-y-2">
               <h1 className="text-3xl font-semibold tracking-tight">
@@ -133,7 +133,7 @@ export default function LoginPage() {
 
             <div className="relative">
               <Separator className="bg-muted" />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface/95 px-3 py-1 text-xs text-muted-foreground shadow-sm dark:bg-surface/70">
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-background px-3 py-1 text-xs text-muted-foreground shadow-sm">
                 or sign in with email
               </span>
             </div>

@@ -65,13 +65,13 @@ export default async function CategoriesPage() {
           </div>
 
           {serializedCategories.length === 0 ? (
-            <Card className="p-12 sm:p-16 text-center border-2 border-dashed">
+            <Card className="p-12 sm:p-16 text-center border-2 border-dashed shadow-md">
               <div className="flex flex-col items-center gap-6 max-w-md mx-auto">
-                <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                <div className="h-20 w-20 rounded-lg bg-primary/10 flex items-center justify-center">
                   <Tags className="h-10 w-10 text-primary" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-semibold">No categories yet</h3>
+                  <h3 className="text-xl font-bold">No categories yet</h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
                     Click &quot;Add Category&quot; to get started
                   </p>
@@ -84,14 +84,14 @@ export default async function CategoriesPage() {
               {/* Income Categories */}
               {income.length > 0 && (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 dark:bg-green-950">
-                      <span className="text-green-600 dark:text-green-400">
+                  <h2 className="text-xl font-bold flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 dark:bg-emerald-950/30">
+                      <span className="text-2xl" role="img" aria-label="income">
                         💰
                       </span>
                     </span>
-                    <span className="text-green-600 dark:text-green-400">
-                      Income
+                    <span className="text-emerald-600 dark:text-emerald-400">
+                      Income Categories
                     </span>
                   </h2>
                   <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -104,30 +104,27 @@ export default async function CategoriesPage() {
                       }) => (
                         <Card
                           key={category._id}
-                          className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+                          className="group relative overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02]"
                         >
-                          <div className="absolute inset-0 bg-linear-to-br from-green-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                          <div className="relative p-5 sm:p-6 space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                {category.icon && (
-                                  <span className="text-2xl">
-                                    {category.icon}
-                                  </span>
-                                )}
-                                <span className="font-semibold text-lg">
-                                  {category.name}
+                          <div className="relative p-6 space-y-4">
+                            <div className="flex items-center gap-3">
+                              {category.icon && (
+                                <span className="text-3xl" role="img">
+                                  {category.icon}
                                 </span>
-                              </div>
+                              )}
+                              <span className="font-bold text-lg text-foreground">
+                                {category.name}
+                              </span>
                             </div>
                             <Link href={`/categories/${category._id}`}>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full justify-between group-hover:bg-green-500/10 transition-colors"
+                                className="w-full justify-between group-hover:bg-emerald-500/10 group-hover:text-emerald-600 transition-colors"
                               >
                                 Edit Category
-                                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                               </Button>
                             </Link>
                           </div>
@@ -141,12 +138,18 @@ export default async function CategoriesPage() {
               {/* Expense Categories */}
               {expense.length > 0 && (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 dark:bg-red-950">
-                      <span className="text-red-600 dark:text-red-400">💸</span>
+                  <h2 className="text-xl font-bold flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 dark:bg-rose-950/30">
+                      <span
+                        className="text-2xl"
+                        role="img"
+                        aria-label="expense"
+                      >
+                        💸
+                      </span>
                     </span>
-                    <span className="text-red-600 dark:text-red-400">
-                      Expense
+                    <span className="text-rose-600 dark:text-rose-400">
+                      Expense Categories
                     </span>
                   </h2>
                   <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -159,30 +162,27 @@ export default async function CategoriesPage() {
                       }) => (
                         <Card
                           key={category._id}
-                          className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+                          className="group relative overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02]"
                         >
-                          <div className="absolute inset-0 bg-linear-to-br from-red-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                          <div className="relative p-5 sm:p-6 space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                {category.icon && (
-                                  <span className="text-2xl">
-                                    {category.icon}
-                                  </span>
-                                )}
-                                <span className="font-semibold text-lg">
-                                  {category.name}
+                          <div className="relative p-6 space-y-4">
+                            <div className="flex items-center gap-3">
+                              {category.icon && (
+                                <span className="text-3xl" role="img">
+                                  {category.icon}
                                 </span>
-                              </div>
+                              )}
+                              <span className="font-bold text-lg text-foreground">
+                                {category.name}
+                              </span>
                             </div>
                             <Link href={`/categories/${category._id}`}>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full justify-between group-hover:bg-red-500/10 transition-colors"
+                                className="w-full justify-between group-hover:bg-rose-500/10 group-hover:text-rose-600 transition-colors"
                               >
                                 Edit Category
-                                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                               </Button>
                             </Link>
                           </div>
@@ -196,14 +196,18 @@ export default async function CategoriesPage() {
               {/* Transfer Categories */}
               {transfer.length > 0 && (
                 <div className="space-y-4">
-                  <h2 className="text-xl font-semibold flex items-center gap-2">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-950">
-                      <span className="text-blue-600 dark:text-blue-400">
+                  <h2 className="text-xl font-bold flex items-center gap-3">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-100 dark:bg-cyan-950/30">
+                      <span
+                        className="text-2xl"
+                        role="img"
+                        aria-label="transfer"
+                      >
                         🔄
                       </span>
                     </span>
-                    <span className="text-blue-600 dark:text-blue-400">
-                      Transfer
+                    <span className="text-cyan-600 dark:text-cyan-400">
+                      Transfer Categories
                     </span>
                   </h2>
                   <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
@@ -216,30 +220,27 @@ export default async function CategoriesPage() {
                       }) => (
                         <Card
                           key={category._id}
-                          className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
+                          className="group relative overflow-hidden transition-all duration-200 hover:shadow-lg hover:scale-[1.02]"
                         >
-                          <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                          <div className="relative p-5 sm:p-6 space-y-3">
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-3">
-                                {category.icon && (
-                                  <span className="text-2xl">
-                                    {category.icon}
-                                  </span>
-                                )}
-                                <span className="font-semibold text-lg">
-                                  {category.name}
+                          <div className="relative p-6 space-y-4">
+                            <div className="flex items-center gap-3">
+                              {category.icon && (
+                                <span className="text-3xl" role="img">
+                                  {category.icon}
                                 </span>
-                              </div>
+                              )}
+                              <span className="font-bold text-lg text-foreground">
+                                {category.name}
+                              </span>
                             </div>
                             <Link href={`/categories/${category._id}`}>
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                className="w-full justify-between group-hover:bg-blue-500/10 transition-colors"
+                                className="w-full justify-between group-hover:bg-primary/10 group-hover:text-primary transition-colors"
                               >
                                 Edit Category
-                                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                               </Button>
                             </Link>
                           </div>

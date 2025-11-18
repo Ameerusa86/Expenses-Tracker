@@ -37,8 +37,30 @@ export async function generatePlan(input: unknown) {
     status: 'draft',
   })
 
+  // Enrich allocations with liability names for UI display
+  const ids = result.allocations.map((a) => a.liabilityId)
+  const liabs = ids.length
+    ? await Liability.find({ _id: { $in: ids }, userId }, { _id: 1, name: 1 })
+        .lean()
+        .exec()
+    : []
+  const nameById = new Map<string, string>(
+    liabs.map((l) => [String(l._id), l.name as unknown as string]),
+  )
+
+  const enriched = {
+    allocations: result.allocations.map((a) => ({
+      liabilityId: String(a.liabilityId),
+      liabilityName: nameById.get(String(a.liabilityId)),
+      amountCents: a.amountCents,
+      dueDate: a.dueDate,
+    })),
+    totalAllocatedCents: result.totalAllocatedCents,
+    remainingCents: result.remainingCents,
+  }
+
   return JSON.parse(
-    JSON.stringify({ planId: plan._id, ...result, payDate: parsed.payDate }),
+    JSON.stringify({ planId: plan._id, ...enriched, payDate: parsed.payDate }),
   )
 }
 

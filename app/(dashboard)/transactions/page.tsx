@@ -9,7 +9,15 @@ import { AddTransactionModal } from '@/components/transactions/add-transaction-m
 import Link from 'next/link'
 import { formatCurrency } from '@/utils/money'
 import { AddAccountModal } from '@/components/accounts/add-account-modal'
-import { Wallet, Tags, Receipt } from 'lucide-react'
+import {
+  Wallet,
+  Tags,
+  Receipt,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+} from 'lucide-react'
+import { Types } from 'mongoose'
 
 interface SerializedTransaction {
   _id: string
@@ -33,6 +41,32 @@ export default async function TransactionsPage() {
 
   const accounts = await Account.find({ userId }).lean()
   const categories = await Category.find({ userId }).lean()
+
+  // Calculate this month's summary
+  const now = new Date()
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
+  const monthSummary = await Transaction.aggregate([
+    {
+      $match: {
+        userId: new Types.ObjectId(userId),
+        date: { $gte: monthStart },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        income: {
+          $sum: { $cond: [{ $gte: ['$amountCents', 0] }, '$amountCents', 0] },
+        },
+        expense: {
+          $sum: { $cond: [{ $lt: ['$amountCents', 0] }, '$amountCents', 0] },
+        },
+        total: { $sum: '$amountCents' },
+      },
+    },
+  ]).exec()
+
+  const summary = monthSummary[0] || { income: 0, expense: 0, total: 0 }
 
   const accountMap = new Map(
     accounts.map((acc) => [
@@ -105,45 +139,119 @@ export default async function TransactionsPage() {
             </div>
           </div>
 
+          {/* Monthly Summary Cards */}
+          {hasAccounts && serializedTransactions.length > 0 && (
+            <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-3">
+              {/* Income Card */}
+              <Card className="p-6 transition-all duration-200 hover:shadow-lg">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      This Month Income
+                    </p>
+                    <p className="text-2xl font-bold text-emerald-600">
+                      {formatCurrency(summary.income)}
+                    </p>
+                  </div>
+                  <div className="h-12 w-12 rounded-lg bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center">
+                    <TrendingUp className="h-6 w-6 text-emerald-600" />
+                  </div>
+                </div>
+              </Card>
+
+              {/* Expense Card */}
+              <Card className="p-6 transition-all duration-200 hover:shadow-lg">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      This Month Expenses
+                    </p>
+                    <p className="text-2xl font-bold text-rose-600">
+                      {formatCurrency(summary.expense)}
+                    </p>
+                  </div>
+                  <div className="h-12 w-12 rounded-lg bg-rose-100 dark:bg-rose-950/30 flex items-center justify-center">
+                    <TrendingDown className="h-6 w-6 text-rose-600" />
+                  </div>
+                </div>
+              </Card>
+
+              {/* Net Card */}
+              <Card className="p-6 transition-all duration-200 hover:shadow-lg">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Net Cash Flow
+                    </p>
+                    <p
+                      className={`text-2xl font-bold ${
+                        summary.total >= 0
+                          ? 'text-emerald-600'
+                          : 'text-rose-600'
+                      }`}
+                    >
+                      {formatCurrency(summary.total)}
+                    </p>
+                  </div>
+                  <div
+                    className={`h-12 w-12 rounded-lg flex items-center justify-center ${
+                      summary.total >= 0
+                        ? 'bg-emerald-100 dark:bg-emerald-950/30'
+                        : 'bg-rose-100 dark:bg-rose-950/30'
+                    }`}
+                  >
+                    <DollarSign
+                      className={`h-6 w-6 ${
+                        summary.total >= 0
+                          ? 'text-emerald-600'
+                          : 'text-rose-600'
+                      }`}
+                    />
+                  </div>
+                </div>
+              </Card>
+            </div>
+          )}
+
           {/* Desktop Table View - Hidden on mobile */}
-          <Card className="hidden lg:block overflow-hidden border-0">
+          <Card className="hidden lg:block overflow-hidden border-0 shadow-md">
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b bg-muted/30">
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <tr className="border-b-2 border-border bg-muted/50">
+                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-foreground">
                       Date
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-foreground">
                       Payee
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-foreground">
                       Category
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-foreground">
                       Account
                     </th>
-                    <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-foreground">
                       Amount
                     </th>
-                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-6 py-4 text-center text-xs font-bold uppercase tracking-wider text-foreground">
                       Status
                     </th>
-                    <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    <th className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-foreground">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border/50">
+                <tbody className="divide-y divide-border/50 bg-card">
                   {!hasAccounts ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-16">
+                      <td colSpan={7} className="px-6 py-20">
                         <div className="flex flex-col items-center gap-6 max-w-md mx-auto text-center">
-                          <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                          <div className="h-20 w-20 rounded-lg bg-primary/10 flex items-center justify-center">
                             <Wallet className="h-10 w-10 text-primary" />
                           </div>
                           <div className="space-y-2">
-                            <h3 className="text-xl font-semibold">
+                            <h3 className="text-xl font-bold">
                               No accounts yet
                             </h3>
                             <p className="text-muted-foreground text-sm leading-relaxed">
@@ -156,13 +264,13 @@ export default async function TransactionsPage() {
                     </tr>
                   ) : serializedTransactions.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="px-6 py-16">
+                      <td colSpan={7} className="px-6 py-20">
                         <div className="flex flex-col items-center gap-6 max-w-md mx-auto text-center">
-                          <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                          <div className="h-20 w-20 rounded-lg bg-primary/10 flex items-center justify-center">
                             <Receipt className="h-10 w-10 text-primary" />
                           </div>
                           <div className="space-y-2">
-                            <h3 className="text-xl font-semibold">
+                            <h3 className="text-xl font-bold">
                               No transactions yet
                             </h3>
                             <p className="text-muted-foreground text-sm leading-relaxed">
@@ -176,10 +284,10 @@ export default async function TransactionsPage() {
                     serializedTransactions.map((txn) => (
                       <tr
                         key={txn._id}
-                        className="transition-colors hover:bg-muted/30 group"
+                        className="transition-all hover:bg-muted/50 group"
                       >
                         <td className="px-6 py-4 text-sm whitespace-nowrap">
-                          <div className="font-medium">
+                          <div className="font-semibold text-foreground">
                             {new Date(txn.date).toLocaleDateString('en-US', {
                               month: 'short',
                               day: 'numeric',
@@ -190,42 +298,40 @@ export default async function TransactionsPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-sm">
-                          <div className="font-semibold">
+                          <div className="font-semibold text-foreground">
                             {txn.payee || '-'}
                           </div>
                           {txn.notes && (
-                            <div className="text-xs text-muted-foreground truncate max-w-xs">
+                            <div className="text-xs text-muted-foreground truncate max-w-xs mt-0.5">
                               {txn.notes}
                             </div>
                           )}
                         </td>
-                        <td className="px-6 py-4 text-sm">
-                          <span className="inline-flex items-center gap-1.5">
-                            {txn.categoryId
-                              ? categoryMap.get(txn.categoryId) || 'Unknown'
-                              : 'Uncategorized'}
-                          </span>
+                        <td className="px-6 py-4 text-sm text-foreground">
+                          {txn.categoryId
+                            ? categoryMap.get(txn.categoryId) || 'Unknown'
+                            : 'Uncategorized'}
                         </td>
-                        <td className="px-6 py-4 text-sm">
+                        <td className="px-6 py-4 text-sm text-foreground font-medium">
                           {accountMap.get(txn.accountId) || 'Unknown'}
                         </td>
                         <td
                           className={`px-6 py-4 text-right text-sm font-bold whitespace-nowrap ${
                             txn.amountCents >= 0
-                              ? 'text-green-600 dark:text-green-400'
-                              : 'text-red-600 dark:text-red-400'
+                              ? 'text-emerald-600 dark:text-emerald-400'
+                              : 'text-rose-600 dark:text-rose-400'
                           }`}
                         >
                           {formatCurrency(txn.amountCents)}
                         </td>
                         <td className="px-6 py-4 text-center">
                           <span
-                            className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                            className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold ${
                               txn.status === 'cleared'
-                                ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400'
+                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400'
                                 : txn.status === 'pending'
-                                  ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400'
-                                  : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400'
+                                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
+                                  : 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-400'
                             }`}
                           >
                             {txn.status}
@@ -236,7 +342,7 @@ export default async function TransactionsPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="opacity-0 group-hover:opacity-100 transition-opacity"
+                              className="opacity-0 group-hover:opacity-100 transition-opacity hover:bg-primary/10 hover:text-primary"
                             >
                               Edit
                             </Button>
@@ -253,13 +359,13 @@ export default async function TransactionsPage() {
           {/* Mobile Card View - Visible only on mobile/tablet */}
           <div className="lg:hidden space-y-4">
             {!hasAccounts ? (
-              <Card className="p-12 sm:p-16 text-center border-2 border-dashed">
+              <Card className="p-12 sm:p-16 text-center border-2 border-dashed shadow-md">
                 <div className="flex flex-col items-center gap-6 max-w-md mx-auto">
-                  <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <div className="h-20 w-20 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Wallet className="h-10 w-10 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-xl font-semibold">No accounts yet</h3>
+                    <h3 className="text-xl font-bold">No accounts yet</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
                       Create an account to start adding transactions
                     </p>
@@ -268,15 +374,13 @@ export default async function TransactionsPage() {
                 </div>
               </Card>
             ) : serializedTransactions.length === 0 ? (
-              <Card className="p-12 sm:p-16 text-center border-2 border-dashed">
+              <Card className="p-12 sm:p-16 text-center border-2 border-dashed shadow-md">
                 <div className="flex flex-col items-center gap-6 max-w-md mx-auto">
-                  <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <div className="h-20 w-20 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Receipt className="h-10 w-10 text-primary" />
                   </div>
                   <div className="space-y-2">
-                    <h3 className="text-xl font-semibold">
-                      No transactions yet
-                    </h3>
+                    <h3 className="text-xl font-bold">No transactions yet</h3>
                     <p className="text-muted-foreground text-sm leading-relaxed">
                       Click &quot;Add Transaction&quot; to get started
                     </p>
@@ -287,16 +391,16 @@ export default async function TransactionsPage() {
               serializedTransactions.map((txn) => (
                 <Card
                   key={txn._id}
-                  className="p-5 hover:shadow-lg transition-all duration-200 border-0 shadow-sm"
+                  className="p-5 transition-all hover:shadow-lg"
                 >
                   <div className="space-y-4">
                     {/* Header with payee and amount */}
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-base truncate">
+                        <p className="font-bold text-base truncate text-foreground">
                           {txn.payee || 'Transaction'}
                         </p>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-sm text-muted-foreground mt-1.5">
                           {new Date(txn.date).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -307,8 +411,8 @@ export default async function TransactionsPage() {
                       <p
                         className={`text-xl font-bold shrink-0 ${
                           txn.amountCents >= 0
-                            ? 'text-green-600 dark:text-green-400'
-                            : 'text-red-600 dark:text-red-400'
+                            ? 'text-emerald-600 dark:text-emerald-400'
+                            : 'text-rose-600 dark:text-rose-400'
                         }`}
                       >
                         {formatCurrency(txn.amountCents)}
@@ -316,20 +420,20 @@ export default async function TransactionsPage() {
                     </div>
 
                     {/* Details */}
-                    <div className="grid grid-cols-2 gap-3 pt-2 border-t">
+                    <div className="grid grid-cols-2 gap-3 pt-2 border-t border-border/50">
                       <div>
-                        <p className="text-muted-foreground text-xs uppercase tracking-wider mb-1">
+                        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider mb-1.5">
                           Account
                         </p>
-                        <p className="font-medium text-sm truncate">
+                        <p className="font-semibold text-sm truncate text-foreground">
                           {accountMap.get(txn.accountId) || 'Unknown'}
                         </p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground text-xs uppercase tracking-wider mb-1">
+                        <p className="text-muted-foreground text-xs font-semibold uppercase tracking-wider mb-1.5">
                           Category
                         </p>
-                        <p className="font-medium text-sm truncate">
+                        <p className="font-semibold text-sm truncate text-foreground">
                           {txn.categoryId
                             ? categoryMap.get(txn.categoryId) || 'Unknown'
                             : 'Uncategorized'}
@@ -338,20 +442,24 @@ export default async function TransactionsPage() {
                     </div>
 
                     {/* Footer with status and action */}
-                    <div className="flex items-center justify-between pt-3 border-t">
+                    <div className="flex items-center justify-between pt-3 border-t border-border/50">
                       <span
-                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ${
+                        className={`inline-flex items-center rounded-full px-3 py-1.5 text-xs font-semibold ${
                           txn.status === 'cleared'
-                            ? 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-400'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400'
                             : txn.status === 'pending'
-                              ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-400'
-                              : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400'
+                              ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400'
+                              : 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950/30 dark:text-cyan-400'
                         }`}
                       >
                         {txn.status}
                       </span>
                       <Link href={`/transactions/${txn._id}`}>
-                        <Button variant="ghost" size="sm">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="hover:bg-primary/10 hover:text-primary"
+                        >
                           Edit
                         </Button>
                       </Link>

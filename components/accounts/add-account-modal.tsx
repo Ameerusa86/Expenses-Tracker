@@ -110,15 +110,15 @@ export function AddAccountModal() {
           <span>Add Account</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] p-0 gap-0 overflow-hidden border border-border/60 bg-surface/95 shadow-elevated">
+      <DialogContent className="sm:max-w-[600px] p-0 gap-0 overflow-hidden border bg-background shadow-sm">
         {/* Animated Header with gradient */}
-        <div className="relative bg-gradient-to-br from-primary via-primary to-primary/90 px-6 py-10 sm:px-8 overflow-hidden">
+        <div className="relative border-b bg-muted/40 px-6 py-6 sm:px-8">
           {/* Decorative elements */}
           <div className="absolute top-0 right-0 w-40 h-40 rounded-full bg-primary-foreground/15 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-32 h-32 rounded-full bg-primary-foreground/15 blur-2xl" />
 
           <DialogHeader className="relative space-y-3">
-            <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/20 backdrop-blur-sm ring-4 ring-primary-foreground/30">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground">
               <Sparkles className="h-7 w-7 text-primary-foreground" />
             </div>
             <DialogTitle className="text-3xl font-bold text-primary-foreground">
@@ -186,9 +186,7 @@ export function AddAccountModal() {
                     {/* Icon with gradient */}
                     <div
                       className={`flex h-12 w-12 items-center justify-center rounded-xl ${
-                        isSelected
-                          ? `bg-gradient-to-br ${type.color} shadow-lg`
-                          : 'bg-muted'
+                        isSelected ? `border bg-background` : 'bg-muted'
                       }`}
                     >
                       <Icon

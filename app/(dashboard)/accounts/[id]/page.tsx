@@ -72,7 +72,7 @@ export default async function EditAccountPage({
               id="type"
               name="type"
               defaultValue={typed.type}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-10 w-full rounded-lg border bg-background px-3 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               required
             >
               <option value="cash">Cash</option>
@@ -99,7 +99,7 @@ export default async function EditAccountPage({
               id="currency"
               name="currency"
               defaultValue={typed.currency || 'USD'}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="h-10 w-full rounded-lg border bg-background px-3 text-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               required
             >
               <option value="USD">USD — US Dollar</option>
